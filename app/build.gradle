@@ -36,6 +36,28 @@ android {
     }
 }
 
+allprojects {
+    repositories {
+        maven {
+            url = uri("https://maven.pkg.github.com/AzureAD/msal-android-native-auth-preview")
+            credentials {
+                username = System.getenv("GITHUB_USERNAME") != null ? System.getenv("GITHUB_USERNAME") : project.findProperty("GITHUB_USERNAME")
+                password = System.getenv("GITHUB_TOKEN") != null ? System.getenv("GITHUB_TOKEN") : project.findProperty("GITHUB_TOKEN")
+            }
+            content {
+                includeGroupByRegex "com\\.microsoft.*"
+            }
+        }
+        //Needed for com.microsoft.device.display:display-mask library
+        maven {
+            url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
+            name 'Duo-SDK-Feed'
+        }
+        mavenCentral()
+        google()
+    }
+}
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.10.1'
@@ -43,8 +65,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
 
-    implementation 'com.microsoft.identity.client:msal:4.3.2.MOCKPREVIEW'
-    implementation 'com.microsoft.identity:common:10.1.1.MOCKPREVIEW'
+    implementation 'com.microsoft.identity.client:msal:4.7.0.PREVIEW'
+    implementation 'com.microsoft.identity:common:15.0.0.PREVIEW'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     testImplementation 'junit:junit:4.13.2'

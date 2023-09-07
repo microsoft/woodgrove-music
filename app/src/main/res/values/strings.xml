@@ -7,5 +7,14 @@
 	<string name="next">Next</string>
 	<string name="previous">Previous</string>
 
-	<string name="launch_activity_text">Woodgrove Airlines</string>
+	<string name="launch_text">Woodgrove Music</string>
+
+	<string name="landing_text">Woodgrove 🎵</string>
+	<string name="landing_login">Log in</string>
+	<string name="landing_signup">Sign up</string>
+
+	<string name="home_text">Welcome to Woodgrove Music. Select your favourite tunes and start listening 🎵</string>
+	<string name="home_my_profile">My profile</string>
+
+	<string name="profile_text">Profile</string>
 </resources>
