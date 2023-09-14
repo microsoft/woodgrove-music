@@ -1,10 +1,9 @@
-package com.woodgrove.android
+package com.woodgrove.android.ui
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.woodgrove.android.databinding.ActivityHomeBinding
 import com.woodgrove.android.databinding.ActivityProfileBinding
 
 class ProfileActivity : AppCompatActivity() {

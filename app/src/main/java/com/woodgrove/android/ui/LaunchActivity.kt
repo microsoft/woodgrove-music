@@ -1,11 +1,9 @@
-package com.woodgrove.android
+package com.woodgrove.android.ui
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.microsoft.identity.client.statemachine.results.SignOutResult
 import com.woodgrove.android.databinding.ActivityLaunchBinding
+import com.woodgrove.android.ui.landing.LandingActivity
 import com.woodgrove.android.utils.AuthClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +36,6 @@ class LaunchActivity : AppCompatActivity() {
     }
 
     private suspend fun containsAccount(): Boolean {
-        return authClient.getCurrentAccount() == null
+        return authClient.getCurrentAccount() != null
     }
 }

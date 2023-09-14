@@ -12,7 +12,6 @@
     "pii_enabled": false,
     "log_level": "INFO",
     "logcat_enabled": true
-  },
-  "dc": "ESTS-PUB-WUS3-AZ1-FD000-TEST1"
+  }
 }
 

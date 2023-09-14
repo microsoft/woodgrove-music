@@ -4,32 +4,38 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".ui.HomeActivity">
+	tools:background="@color/white">
 
-	<TextView
-		android:id="@+id/home_profile"
+	<EditText
+		android:id="@+id/signupCode_codeField"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/home_my_profile"
-		android:textSize="12sp"
 		android:layout_marginTop="5dp"
 		android:padding="15dp"
+		android:text="Code"
 		android:textAlignment="center"
+		android:textSize="12sp"
+		android:textColor="@color/design_default_color_primary_variant"
+		app:layout_constraintBottom_toTopOf="@+id/signupCode_next"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
+		app:layout_constraintHorizontal_bias="0.5"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_chainStyle="packed" />
 
-	<TextView
-		android:id="@+id/home_text"
+	<Button
+		android:id="@+id/signupCode_next"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/home_text"
-		android:textSize="12sp"
-		android:layout_marginTop="5dp"
 		android:padding="15dp"
-		android:textAlignment="center"
+		android:textSize="12sp"
+		android:text="Next"
+		android:background="@color/design_default_color_primary_variant"
+		android:textColor="@color/white"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.5"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
+		app:layout_constraintTop_toBottomOf="@+id/signupCode_codeField" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

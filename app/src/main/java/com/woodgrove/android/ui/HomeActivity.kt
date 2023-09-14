@@ -1,12 +1,13 @@
-package com.woodgrove.android
+package com.woodgrove.android.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.woodgrove.android.databinding.ActivityHomeBinding
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : Activity() {
 
     private lateinit var binding: ActivityHomeBinding
 
