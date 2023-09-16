@@ -6,8 +6,8 @@
 		<item name="colorPrimaryVariant">@color/purple_700</item>
 		<item name="colorOnPrimary">@color/white</item>
 		<!-- Secondary brand color. -->
-		<item name="colorSecondary">@color/teal_200</item>
-		<item name="colorSecondaryVariant">@color/teal_700</item>
+		<item name="colorSecondary">@color/theme_colour_2</item>
+		<item name="colorSecondaryVariant">@color/theme_colour_22</item>
 		<item name="colorOnSecondary">@color/black</item>
 		<!-- Status bar color. -->
 		<item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
@@ -23,11 +23,17 @@
 
 	<style name="Theme.Woodgrove.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-	<style name="TransparentFloatingActivity" parent="AppTheme">
+	<style name="TransparentFloatingActivity" parent="Theme.MaterialComponents.Light.NoActionBar">
 		<item name="android:windowIsTranslucent">true</item>
 		<item name="android:windowBackground">@color/custom_transparent</item>
 		<item name="android:windowContentOverlay">@null</item>
-		<item name="android:windowIsFloating">true</item>
 		<item name="android:backgroundDimEnabled">false</item>
+		<item name="windowNoTitle">true</item>
+		<item name="windowActionBar">false</item>
+	</style>
+
+	<style name="TextInputTheme" parent="TransparentFloatingActivity">
+		<item name="colorPrimary">@color/purple_700</item>
+		<item name="colorControlActivated">@color/theme_colour_2</item>
 	</style>
 </resources>

@@ -10,5 +10,11 @@
 	<color name="white">#FFFFFFFF</color>
 	<color name="red">#F00</color>
 
-	<color name="custom_transparent">#40000000</color>
+	<color name="custom_transparent">#00000000</color>
+
+	<color name="theme_colour_1">#5E3377</color>
+	<color name="theme_colour_1_darker">#FF47275A</color>
+	<color name="theme_colour_2">#fe3874</color>
+	<color name="theme_colour_22">#A1234A</color>
+	<color name="theme_colour_3">#ad1729</color>
 </resources>

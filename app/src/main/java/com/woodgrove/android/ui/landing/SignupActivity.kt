@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.woodgrove.android.R
 import com.woodgrove.android.databinding.ActivitySignupBinding
 
 class SignupActivity : AppCompatActivity() {
@@ -31,6 +32,7 @@ class SignupActivity : AppCompatActivity() {
     private fun initializeListeners() {
         binding.signupClose.setOnClickListener {
             finish()
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
     }
 }

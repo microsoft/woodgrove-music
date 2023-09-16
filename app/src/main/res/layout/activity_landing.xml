@@ -5,8 +5,27 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/design_default_color_primary"
+	android:background="@drawable/gradient_background"
 	tools:context=".ui.LaunchActivity">
+
+	<FrameLayout
+		android:id="@+id/landing_white_block"
+		android:layout_width="match_parent"
+		android:layout_height="250dp"
+		android:background="@color/white"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"/>
+
+	<ImageView
+		android:id="@+id/landing_wave"
+		android:layout_width="match_parent"
+		android:layout_height="200dp"
+		android:src="@drawable/wave"
+		android:scaleType="fitXY"
+		app:layout_constraintBottom_toTopOf="@+id/landing_white_block"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"/>
 
 	<ImageView
 		android:id="@+id/landing_logo"
@@ -26,8 +45,9 @@
 		android:layout_height="wrap_content"
 		android:text="@string/landing_text"
 		android:textSize="35sp"
+		android:textColor="@color/white"
 		android:layout_marginTop="5dp"
-		app:layout_constraintBottom_toTopOf="@+id/landing_login"
+		app:layout_constraintBottom_toTopOf="@+id/landing_wave"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/landing_logo" />
@@ -38,12 +58,12 @@
 		android:layout_height="wrap_content"
 		android:text="@string/landing_login"
 		android:padding="15dp"
-		android:background="@color/white"
-		android:textColor="@color/black"
-		android:layout_margin="15dp"
+		android:background="@drawable/bg_selector_white_rounded_border"
+		android:textColor="@color/theme_colour_1_darker"
+		android:layout_marginTop="50dp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintBottom_toTopOf="@+id/landing_signup" />
+		app:layout_constraintTop_toTopOf="@+id/landing_white_block" />
 
 	<Button
 		android:id="@+id/landing_signup"
@@ -51,11 +71,11 @@
 		android:layout_height="wrap_content"
 		android:text="@string/landing_signup"
 		android:padding="15dp"
-		android:background="@color/white"
-		android:textColor="@color/black"
-		android:layout_margin="15dp"
+		android:background="@drawable/bg_selector_white_rounded_border"
+		android:textColor="@color/theme_colour_1_darker"
+		android:layout_margin="5dp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintBottom_toBottomOf="parent" />
+		app:layout_constraintTop_toBottomOf="@+id/landing_login" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
