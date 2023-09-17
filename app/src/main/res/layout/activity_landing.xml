@@ -52,7 +52,7 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/landing_logo" />
 
-	<Button
+	<android.widget.Button
 		android:id="@+id/landing_login"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/landing_white_block" />
 
-	<Button
+	<android.widget.Button
 		android:id="@+id/landing_signup"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"

@@ -14,6 +14,12 @@
 	<string name="landing_login">Log in</string>
 	<string name="landing_signup">Sign up</string>
 
+	<string name="signup_email_hint">Email *</string>
+	<string name="signup_password_hint">Password *</string>
+	<string name="signup_name_hint">Name *</string>
+
+	<string name="next_button">Next</string>
+
 	<string name="home_text">Welcome to Woodgrove Music. Select your favourite tunes and start listening 🎵</string>
 	<string name="home_my_profile">My profile</string>
 

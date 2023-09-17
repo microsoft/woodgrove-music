@@ -10,7 +10,7 @@
 		<item name="colorSecondaryVariant">@color/theme_colour_22</item>
 		<item name="colorOnSecondary">@color/black</item>
 		<!-- Status bar color. -->
-		<item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+		<item name="android:statusBarColor">@color/black</item>
 		<!-- Customize your theme here. -->
 	</style>
 
@@ -30,6 +30,16 @@
 		<item name="android:backgroundDimEnabled">false</item>
 		<item name="windowNoTitle">true</item>
 		<item name="windowActionBar">false</item>
+
+		<item name="colorPrimary">@color/purple_500</item>
+		<item name="colorPrimaryVariant">@color/purple_700</item>
+		<item name="colorOnPrimary">@color/white</item>
+		<!-- Secondary brand color. -->
+		<item name="colorSecondary">@color/theme_colour_2</item>
+		<item name="colorSecondaryVariant">@color/theme_colour_22</item>
+		<item name="colorOnSecondary">@color/black</item>
+		<!-- Status bar color. -->
+		<item name="android:statusBarColor">@color/black</item>
 	</style>
 
 	<style name="TextInputTheme" parent="TransparentFloatingActivity">
