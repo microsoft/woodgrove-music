@@ -1,14 +1,10 @@
 package com.woodgrove.android.ui.landing
 
 import android.app.AlertDialog
-import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputLayout
@@ -17,13 +13,13 @@ import com.microsoft.identity.client.exception.MsalException
 import com.microsoft.identity.client.statemachine.results.Result
 import com.microsoft.identity.client.statemachine.results.SignUpResult
 import com.microsoft.identity.client.statemachine.results.SignUpUsingPasswordResult
+import com.microsoft.identity.client.statemachine.states.SignUpCodeRequiredState
 import com.woodgrove.android.R
 import com.woodgrove.android.databinding.FragmentSignupEmailPasswordBinding
 import com.woodgrove.android.utils.AuthClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
 
 class SignupEmailPasswordFragment : Fragment() {
 
@@ -125,7 +121,7 @@ class SignupEmailPasswordFragment : Fragment() {
 
                 when (actionResult) {
                     is SignUpResult.CodeRequired -> {
-                        navigateNext()
+                        navigateNext(actionResult.nextState)
                     }
                     is SignUpResult.UserAlreadyExists -> {
                         showUserAlreadyExistsError()
@@ -200,14 +196,14 @@ class SignupEmailPasswordFragment : Fragment() {
         alertDialog.show()
     }
 
-    private fun navigateNext() {
+    private fun navigateNext(authState: SignUpCodeRequiredState) {
         val localFragmentManager = parentFragmentManager
         val fragmentTransaction = localFragmentManager.beginTransaction()
         fragmentTransaction.setCustomAnimations(
             R.anim.slide_in_right_full,
             R.anim.slide_out_left_full
         )
-        fragmentTransaction.replace(R.id.signup_fragmentContainer, SignupCodeFragment.getNewInstance(), tag)
+        fragmentTransaction.replace(R.id.signup_fragmentContainer, SignupCodeFragment.getNewInstance(authState), tag)
         fragmentTransaction.commitAllowingStateLoss()
         localFragmentManager.executePendingTransactions()
     }

@@ -1,41 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	tools:background="@color/white">
+	android:id="@+id/signup_scrollContent"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:scrollbars="none"
+	android:overScrollMode="never"
+	android:clipToPadding="false"
+	tools:background="@color/white"
+	android:fillViewport="true"
+	android:isScrollContainer="false">
 
-	<EditText
-		android:id="@+id/signupCode_codeField"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="5dp"
-		android:padding="15dp"
-		android:text="Code"
-		android:textAlignment="center"
-		android:textSize="12sp"
-		android:textColor="@color/design_default_color_primary_variant"
-		app:layout_constraintBottom_toTopOf="@+id/signupCode_next"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.5"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintVertical_chainStyle="packed" />
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		
+		<com.woodgrove.android.ui.utils.codeinput.CodeInputLayout
+			android:id="@+id/signupCode_codeFieldLayout"
+			android:layout_width="242dp"
+			android:layout_height="wrap_content"
+			android:layout_margin="40dp"
+			app:layout_constraintBottom_toTopOf="@+id/signupCode_nextContainer"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintVertical_chainStyle="packed"/>
 
-	<Button
-		android:id="@+id/signupCode_next"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:padding="15dp"
-		android:textSize="12sp"
-		android:text="Next"
-		android:background="@color/design_default_color_primary_variant"
-		android:textColor="@color/white"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.5"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/signupCode_codeField" />
+<!--		<com.google.android.material.textfield.TextInputLayout-->
+<!--			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--			android:theme="@style/TextInputTheme"-->
+<!--			android:id="@+id/signupCode_codeFieldLayout"-->
+<!--			android:layout_width="match_parent"-->
+<!--			android:layout_height="wrap_content"-->
+<!--			android:hint="@string/signup_email_hint"-->
+<!--			android:layout_marginLeft="40dp"-->
+<!--			android:layout_marginRight="40dp"-->
+<!--			android:layout_marginBottom="15dp"-->
+<!--			app:endIconMode="clear_text"-->
+<!--			android:textColorHint="@color/theme_colour_1_darker"-->
+<!--			app:boxStrokeColor="@color/theme_colour_1_darker"-->
+<!--			android:textColor="@color/theme_colour_1_darker"-->
+<!--			app:hintTextColor="@color/theme_colour_1_darker"-->
+<!--			app:endIconTint="@color/theme_colour_1_darker"-->
+<!--			app:layout_constraintBottom_toTopOf="@+id/signupCode_nextContainer"-->
+<!--			app:layout_constraintEnd_toEndOf="parent"-->
+<!--			app:layout_constraintStart_toStartOf="parent"-->
+<!--			app:layout_constraintTop_toTopOf="parent"-->
+<!--			app:layout_constraintVertical_chainStyle="packed">-->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+<!--			<com.google.android.material.textfield.TextInputEditText-->
+<!--				android:id="@+id/signupCode_codeField"-->
+<!--				android:layout_width="match_parent"-->
+<!--				android:inputType="textEmailAddress|textNoSuggestions"-->
+<!--				android:layout_height="match_parent" />-->
+
+<!--		</com.google.android.material.textfield.TextInputLayout>-->
+
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/signupCode_nextContainer"
+			android:layout_width="100dp"
+			android:layout_height="wrap_content"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/signupCode_codeFieldLayout">
+
+			<android.widget.Button
+				android:id="@+id/signupCode_next"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="15dp"
+				android:textSize="12sp"
+				android:gravity="center"
+				android:text="@string/next"
+				app:backgroundTint="@null"
+				android:background="@drawable/bg_selector_white_rounded_border"
+				android:textColor="@drawable/text_selector_button"
+				android:enabled="false"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent"/>
+
+			<com.google.android.material.progressindicator.CircularProgressIndicator
+				android:id="@+id/signupCode_next_loader"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:indeterminate="true"
+				android:visibility="invisible"
+				tools:visibility="visible"
+				app:indicatorSize="30dp"
+				android:elevation="10dp"
+				app:indicatorColor="@color/theme_colour_1"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent"/>
+
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

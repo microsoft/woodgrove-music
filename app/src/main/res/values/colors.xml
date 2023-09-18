@@ -17,4 +17,9 @@
 	<color name="theme_colour_2">#fe3874</color>
 	<color name="theme_colour_22">#A1234A</color>
 	<color name="theme_colour_3">#ad1729</color>
+
+	<!-- CodeInputLayout Background -->
+	<color name="background">#f4f7f8</color>
+	<color name="charcoal_grey">#2b3338</color>
+
 </resources>
