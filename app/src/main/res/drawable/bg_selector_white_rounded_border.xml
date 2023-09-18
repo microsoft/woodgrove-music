@@ -10,6 +10,28 @@
         </shape>
     </item>
 
+    <item android:state_focused="true">
+        <shape
+            android:shape="rectangle" android:padding="10dp">
+            <stroke android:width="2dp" android:color="@color/theme_colour_1" />
+
+            <solid android:color="@android:color/white" />
+
+            <corners android:radius="30dp" />
+        </shape>
+    </item>
+
+    <item android:state_pressed="true">
+        <shape
+            android:shape="rectangle" android:padding="10dp">
+            <stroke android:width="2dp" android:color="@color/theme_colour_1" />
+
+            <solid android:color="@android:color/white" />
+
+            <corners android:radius="30dp" />
+        </shape>
+    </item>
+
     <item android:state_enabled="true">
         <shape
             android:shape="rectangle" android:padding="10dp">
