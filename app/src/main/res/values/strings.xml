@@ -20,15 +20,18 @@
 	<string name="signup_code_hint">Code *</string>
 
 	<string name="next_button">Next</string>
+	<string name="error_title">Oops…</string>
+	<string name="dismiss">Dismiss</string>
+	<string name="general_error_message">An unexpected error has occurred.\nError details: %1$s</string>
+
 	<string name="invalid_email_error">Invalid email</string>
 	<string name="invalid_password_error">Invalid password</string>
 	<string name="invalid_name_error">Invalid name</string>
-	<string name="invalid_code_error">Invalid code</string>
-	<string name="error_title">Oops…</string>
 	<string name="user_exists_error_message">An account with this email address already exists. Do you want to login instead?</string>
 	<string name="go_to_login">Go to login</string>
-	<string name="dismiss">Dismiss</string>
-	<string name="general_error_message">An unexpected error has occurred.\nError details: %1$s</string>
+
+	<string name="invalid_code_error">That code is not correct. Please try again, or request a new code to be sent.</string>
+	<string name="resend_code">Resend code</string>
 
 	<string name="home_text">Welcome to Woodgrove Music. Select your favourite tunes and start listening 🎵</string>
 	<string name="home_my_profile">My profile</string>

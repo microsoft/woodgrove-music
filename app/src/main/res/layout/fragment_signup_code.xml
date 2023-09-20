@@ -28,39 +28,9 @@
 			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintVertical_chainStyle="packed"/>
 
-<!--		<com.google.android.material.textfield.TextInputLayout-->
-<!--			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--			android:theme="@style/TextInputTheme"-->
-<!--			android:id="@+id/signupCode_codeFieldLayout"-->
-<!--			android:layout_width="match_parent"-->
-<!--			android:layout_height="wrap_content"-->
-<!--			android:hint="@string/signup_email_hint"-->
-<!--			android:layout_marginLeft="40dp"-->
-<!--			android:layout_marginRight="40dp"-->
-<!--			android:layout_marginBottom="15dp"-->
-<!--			app:endIconMode="clear_text"-->
-<!--			android:textColorHint="@color/theme_colour_1_darker"-->
-<!--			app:boxStrokeColor="@color/theme_colour_1_darker"-->
-<!--			android:textColor="@color/theme_colour_1_darker"-->
-<!--			app:hintTextColor="@color/theme_colour_1_darker"-->
-<!--			app:endIconTint="@color/theme_colour_1_darker"-->
-<!--			app:layout_constraintBottom_toTopOf="@+id/signupCode_nextContainer"-->
-<!--			app:layout_constraintEnd_toEndOf="parent"-->
-<!--			app:layout_constraintStart_toStartOf="parent"-->
-<!--			app:layout_constraintTop_toTopOf="parent"-->
-<!--			app:layout_constraintVertical_chainStyle="packed">-->
-
-<!--			<com.google.android.material.textfield.TextInputEditText-->
-<!--				android:id="@+id/signupCode_codeField"-->
-<!--				android:layout_width="match_parent"-->
-<!--				android:inputType="textEmailAddress|textNoSuggestions"-->
-<!--				android:layout_height="match_parent" />-->
-
-<!--		</com.google.android.material.textfield.TextInputLayout>-->
-
-
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/signupCode_nextContainer"
+			android:transitionName="signupCode_next_transitioned"
 			android:layout_width="100dp"
 			android:layout_height="wrap_content"
 			app:layout_constraintBottom_toBottomOf="parent"

@@ -1,7 +1,9 @@
 package com.woodgrove.android.ui.landing
 
 import android.app.AlertDialog
+import android.os.Build
 import android.os.Bundle
+import android.transition.Fade
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +22,7 @@ import com.woodgrove.android.utils.AuthClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 class SignupEmailPasswordFragment : Fragment() {
 
@@ -121,32 +124,39 @@ class SignupEmailPasswordFragment : Fragment() {
 
                 when (actionResult) {
                     is SignUpResult.CodeRequired -> {
+                        hideLoading()
                         navigateNext(actionResult.nextState)
                     }
                     is SignUpResult.UserAlreadyExists -> {
+                        hideLoading()
                         showUserAlreadyExistsError()
                     }
                     is SignUpResult.InvalidEmail -> {
+                        hideLoading()
                         showInvalidEmailError()
                     }
                     is SignUpResult.InvalidPassword -> {
+                        hideLoading()
                         showInvalidPasswordError()
                     }
                     is SignUpResult.InvalidAttributes -> {
+                        hideLoading()
                         showInvalidNameError()
                     }
                     is SignUpResult.AttributesRequired, is SignUpResult.Complete -> {
+                        hideLoading()
                         showGeneralError("Unexpected result: $actionResult")
                     }
                     is SignUpUsingPasswordResult.AuthNotSupported,
                     is SignUpResult.UnexpectedError, is SignUpResult.BrowserRequired -> {
+                        hideLoading()
                         showGeneralError((actionResult as Result.ErrorResult).error.errorMessage)
                     }
                 }
             } catch (exception: MsalException) {
+                hideLoading()
                 showGeneralError(exception.message.toString())
             }
-            hideLoading()
         }
     }
 
@@ -197,14 +207,18 @@ class SignupEmailPasswordFragment : Fragment() {
     }
 
     private fun navigateNext(authState: SignUpCodeRequiredState) {
+        val newFragment = SignupCodeFragment.getNewInstance(authState)
+
         val localFragmentManager = parentFragmentManager
         val fragmentTransaction = localFragmentManager.beginTransaction()
-        fragmentTransaction.setCustomAnimations(
-            R.anim.slide_in_right_full,
-            R.anim.slide_out_left_full
-        )
-        fragmentTransaction.replace(R.id.signup_fragmentContainer, SignupCodeFragment.getNewInstance(authState), tag)
-        fragmentTransaction.commitAllowingStateLoss()
+            .setCustomAnimations(
+                R.anim.slide_in_right_full,
+                R.anim.slide_out_left_full
+            )
+            .addSharedElement(binding.signupEmailPasswordContainer, "signupCode_next_transitioned")
+            .replace(R.id.signup_fragmentContainer, newFragment, tag)
+            .commitAllowingStateLoss()
+
         localFragmentManager.executePendingTransactions()
     }
 }

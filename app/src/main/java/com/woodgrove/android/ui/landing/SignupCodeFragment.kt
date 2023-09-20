@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.microsoft.identity.client.exception.MsalException
+import com.microsoft.identity.client.statemachine.results.Result
 import com.microsoft.identity.client.statemachine.results.SignUpResult
 import com.microsoft.identity.client.statemachine.results.SignUpSubmitCodeResult
 import com.microsoft.identity.client.statemachine.states.SignUpCodeRequiredState
 import com.woodgrove.android.R
 import com.woodgrove.android.databinding.FragmentSignupCodeBinding
+import com.woodgrove.android.ui.HomeActivity
 import com.woodgrove.android.utils.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -84,6 +86,10 @@ class SignupCodeFragment : Fragment() {
         binding.signupCodeNextLoader.visibility = View.GONE
     }
 
+    private fun clearCode() {
+        binding.signupCodeCodeFieldLayout.clearCode()
+    }
+
     private fun validateCode() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
@@ -91,8 +97,20 @@ class SignupCodeFragment : Fragment() {
                 val actionResult = authState.submitCode(code)
 
                 when (actionResult) {
-                    else -> {
-                        Log.e("", "actionResult $actionResult")
+                    is SignUpResult.Complete -> {
+                        navigateNext()
+                    }
+                    is SignUpSubmitCodeResult.CodeIncorrect -> {
+                        showInvalidCodeError()
+                        clearCode()
+                    }
+                    is SignUpResult.AttributesRequired -> {
+                        showGeneralError("Unexpected result: $actionResult")
+                    }
+                    is SignUpResult.BrowserRequired,
+                    is SignUpResult.PasswordRequired,
+                    is SignUpResult.UnexpectedError -> {
+                        showGeneralError((actionResult as Result.ErrorResult).error.errorMessage)
                     }
                 }
             } catch (exception: MsalException) {
@@ -100,6 +118,24 @@ class SignupCodeFragment : Fragment() {
             }
             hideLoading()
         }
+    }
+
+    private fun showInvalidCodeError() {
+        val title = getString(R.string.error_title)
+        val message = getString(R.string.invalid_code_error)
+        val builder = AlertDialog.Builder(requireContext())
+        val alertDialog = builder
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(R.string.resend_code) { dialog, id ->
+                // TODO
+            }
+            .setNegativeButton(R.string.dismiss) { dialog, id ->
+                dialog.dismiss()
+            }
+            .create()
+
+        alertDialog.show()
     }
 
     private fun showGeneralError(errorMsg: String?) {
@@ -119,14 +155,7 @@ class SignupCodeFragment : Fragment() {
     }
 
     private fun navigateNext() {
-//        val localFragmentManager = parentFragmentManager
-//        val fragmentTransaction = localFragmentManager.beginTransaction()
-//        fragmentTransaction.setCustomAnimations(
-//            R.anim.slide_in_right_full,
-//            R.anim.slide_out_left_full
-//        )
-//        fragmentTransaction.replace(R.id.signup_fragmentContainer, SignupCodeFragment.getNewInstance(), tag)
-//        fragmentTransaction.commitAllowingStateLoss()
-//        localFragmentManager.executePendingTransactions()
+        startActivity(HomeActivity.getStartIntent(requireContext()))
+        activity?.finish()
     }
 }
