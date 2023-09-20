@@ -27,28 +27,6 @@ class LandingActivity : AppCompatActivity() {
         binding = ActivityLandingBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        val start = getColor(R.color.colorGradientStart)
-        val mid = getColor(R.color.colorGradientCenter)
-        val end = getColor(R.color.colorGradientEnd)
-
-        val gradient = binding.root.background as GradientDrawable
-
-        val evaluator = ArgbEvaluator()
-        val animator = TimeAnimator.ofFloat(0.0f, 1.0f)
-        animator.duration = 1500
-        animator.repeatCount = ValueAnimator.INFINITE
-        animator.repeatMode = ValueAnimator.REVERSE
-        animator.addUpdateListener {
-            val fraction = it.animatedFraction
-            val newStart = evaluator.evaluate(fraction, start, end) as Int
-            val newMid = evaluator.evaluate(fraction, mid, start) as Int
-            val newEnd = evaluator.evaluate(fraction, end, mid) as Int
-
-            gradient.colors = intArrayOf(newStart, newMid, newEnd)
-        }
-
-        animator.start()
     }
 
     override fun onStart() {

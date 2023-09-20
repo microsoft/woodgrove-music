@@ -5,8 +5,22 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@drawable/gradient_background_mid"
 	tools:context=".ui.LaunchActivity">
+
+	<com.airbnb.lottie.LottieAnimationView
+		android:id="@+id/animation_view"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		android:scaleType="fitXY"
+		android:elevation="-10dp"
+		app:lottie_rawRes="@raw/lottie_background"
+		app:lottie_loop="true"
+		app:lottie_autoPlay="true"
+		/>
 
 	<FrameLayout
 		android:id="@+id/landing_white_block"
@@ -31,6 +45,7 @@
 		android:id="@+id/landing_logo"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:elevation="10dp"
 		android:src="@drawable/woodgrove_logo"
 		android:layout_marginTop="25dp"
 		app:layout_constraintBottom_toTopOf="@+id/landing_mainText"
@@ -44,6 +59,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/landing_text"
+		android:elevation="10dp"
 		android:textSize="35sp"
 		android:textColor="@color/white"
 		android:layout_marginTop="5dp"

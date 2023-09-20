@@ -71,6 +71,7 @@ dependencies {
     implementation 'com.microsoft.identity.client:msal:4.7.0-native-auth-1.0.0'
     implementation 'com.microsoft.identity:common:15.0.0-native-auth-1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.airbnb.android:lottie:6.1.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
