@@ -3,7 +3,6 @@ package com.woodgrove.android.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.woodgrove.android.databinding.ActivityLaunchBinding
-import com.woodgrove.android.ui.landing.LandingActivity
 import com.woodgrove.android.utils.AuthClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

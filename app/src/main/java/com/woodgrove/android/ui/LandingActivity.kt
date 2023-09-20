@@ -1,16 +1,14 @@
-package com.woodgrove.android.ui.landing
+package com.woodgrove.android.ui
 
 
-import android.animation.ArgbEvaluator
-import android.animation.TimeAnimator
-import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.woodgrove.android.R
 import com.woodgrove.android.databinding.ActivityLandingBinding
+import com.woodgrove.android.ui.login.LoginActivity
+import com.woodgrove.android.ui.signup.SignupActivity
 
 class LandingActivity : AppCompatActivity() {
 
@@ -38,10 +36,18 @@ class LandingActivity : AppCompatActivity() {
         binding.landingSignup.setOnClickListener {
             openSignupOverlay()
         }
+        binding.landingLogin.setOnClickListener {
+            openLoginOverlay()
+        }
     }
 
     private fun openSignupOverlay() {
         startActivity(SignupActivity.getStartIntent(this))
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+    }
+
+    private fun openLoginOverlay() {
+        startActivity(LoginActivity.getStartIntent(this))
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }
 }

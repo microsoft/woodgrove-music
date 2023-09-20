@@ -1,9 +1,7 @@
-package com.woodgrove.android.ui.landing
+package com.woodgrove.android.ui.signup
 
 import android.app.AlertDialog
-import android.os.Build
 import android.os.Bundle
-import android.transition.Fade
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +16,7 @@ import com.microsoft.identity.client.statemachine.results.SignUpUsingPasswordRes
 import com.microsoft.identity.client.statemachine.states.SignUpCodeRequiredState
 import com.woodgrove.android.R
 import com.woodgrove.android.databinding.FragmentSignupEmailPasswordBinding
+import com.woodgrove.android.ui.login.LoginActivity
 import com.woodgrove.android.utils.AuthClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -180,7 +179,7 @@ class SignupEmailPasswordFragment : Fragment() {
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton(R.string.go_to_login) { dialog, id ->
-                // TODO
+                navigateToLogin()
             }
             .setNegativeButton(R.string.dismiss) { dialog, id ->
                 dialog.dismiss()
@@ -201,16 +200,35 @@ class SignupEmailPasswordFragment : Fragment() {
         val alertDialog = builder
             .setTitle(title)
             .setMessage(message)
+            .setNegativeButton(R.string.dismiss) { dialog, id ->
+                dialog.dismiss()
+            }
             .create()
 
         alertDialog.show()
+    }
+
+    private fun navigateToLogin() {
+        requireActivity().let { parentActivity ->
+            // Start new activity
+            startActivity(LoginActivity.getStartIntent(requireActivity()))
+
+            val signUpActivity = try {
+                parentActivity as SignupActivity
+            } catch (e: java.lang.ClassCastException) {
+                return
+            }
+            // Close existing
+            signUpActivity.close()
+            parentActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
     }
 
     private fun navigateNext(authState: SignUpCodeRequiredState) {
         val newFragment = SignupCodeFragment.getNewInstance(authState)
 
         val localFragmentManager = parentFragmentManager
-        val fragmentTransaction = localFragmentManager.beginTransaction()
+        localFragmentManager.beginTransaction()
             .setCustomAnimations(
                 R.anim.slide_in_right_full,
                 R.anim.slide_out_left_full

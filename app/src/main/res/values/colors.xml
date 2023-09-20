@@ -17,6 +17,7 @@
 	<color name="theme_colour_2">#fe3874</color>
 	<color name="theme_colour_22">#A1234A</color>
 	<color name="theme_colour_3">#ad1729</color>
+	<color name="custom_grey">#AAAAAA</color>
 
 	<color name="colorGradientStart">#D9FF43</color>
 	<color name="colorGradientCenter">#F67831</color>

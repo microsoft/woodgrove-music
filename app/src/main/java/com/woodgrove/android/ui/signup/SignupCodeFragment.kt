@@ -1,4 +1,4 @@
-package com.woodgrove.android.ui.landing
+package com.woodgrove.android.ui.signup
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -10,8 +10,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.microsoft.identity.client.exception.MsalException
 import com.microsoft.identity.client.statemachine.results.Result
+import com.microsoft.identity.client.statemachine.results.SignInResult
+import com.microsoft.identity.client.statemachine.results.SignUpResendCodeResult
 import com.microsoft.identity.client.statemachine.results.SignUpResult
 import com.microsoft.identity.client.statemachine.results.SignUpSubmitCodeResult
+import com.microsoft.identity.client.statemachine.states.SignInAfterSignUpState
 import com.microsoft.identity.client.statemachine.states.SignUpCodeRequiredState
 import com.woodgrove.android.R
 import com.woodgrove.android.databinding.FragmentSignupCodeBinding
@@ -98,7 +101,7 @@ class SignupCodeFragment : Fragment() {
 
                 when (actionResult) {
                     is SignUpResult.Complete -> {
-                        navigateNext()
+                        signIn(actionResult.nextState)
                     }
                     is SignUpSubmitCodeResult.CodeIncorrect -> {
                         showInvalidCodeError()
@@ -128,7 +131,10 @@ class SignupCodeFragment : Fragment() {
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton(R.string.resend_code) { dialog, id ->
-                // TODO
+                dialog.dismiss()
+                resendCode()
+                clearCode()
+                showLoading()
             }
             .setNegativeButton(R.string.dismiss) { dialog, id ->
                 dialog.dismiss()
@@ -149,9 +155,60 @@ class SignupCodeFragment : Fragment() {
         val alertDialog = builder
             .setTitle(title)
             .setMessage(message)
+            .setNegativeButton(R.string.dismiss) { dialog, id ->
+                dialog.dismiss()
+            }
             .create()
 
         alertDialog.show()
+    }
+
+    private fun resendCode() {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val actionResult = authState.resendCode()
+
+                when (actionResult) {
+                    is SignUpResendCodeResult.Success -> {
+                        authState = actionResult.nextState
+                        showDialog(
+                            title = "",
+                            message = "Code resent"
+                        )
+                    }
+                    is SignUpResult.BrowserRequired,
+                    is SignUpResult.UnexpectedError -> {
+                        showGeneralError((actionResult as Result.ErrorResult).error.errorMessage)
+                    }
+                }
+            } catch (exception: MsalException) {
+                showGeneralError(exception.message.toString())
+            }
+            hideLoading()
+        }
+    }
+
+    private fun signIn(authState: SignInAfterSignUpState) {
+        showLoading()
+        CoroutineScope(Dispatchers.Main).launch {
+            val actionResult = authState.signIn()
+            when (actionResult) {
+                is SignInResult.Complete -> {
+                    navigateNext()
+                    requireActivity().finish()
+                }
+                is SignInResult.CodeRequired,
+                is SignInResult.PasswordRequired -> {
+                    showGeneralError("Unexpected result: $actionResult")
+                }
+                is SignInResult.BrowserRequired,
+                is SignInResult.UserNotFound,
+                is SignInResult.UnexpectedError -> {
+                    showGeneralError((actionResult as Result.ErrorResult).error.errorMessage)
+                }
+            }
+            hideLoading()
+        }
     }
 
     private fun navigateNext() {

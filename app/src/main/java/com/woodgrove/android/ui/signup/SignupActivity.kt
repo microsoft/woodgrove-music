@@ -1,4 +1,4 @@
-package com.woodgrove.android.ui.landing
+package com.woodgrove.android.ui.signup
 
 import android.content.Context
 import android.content.Intent
@@ -31,8 +31,12 @@ class SignupActivity : AppCompatActivity() {
 
     private fun initializeListeners() {
         binding.signupClose.setOnClickListener {
-            finish()
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            close()
         }
+    }
+
+    fun close() {
+        finish()
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }
 }

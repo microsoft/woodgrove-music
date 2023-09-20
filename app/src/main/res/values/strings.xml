@@ -13,11 +13,12 @@
 	<string name="landing_gain_access">Gain access</string>
 	<string name="landing_login">Log in</string>
 	<string name="landing_signup">Sign up</string>
-
-	<string name="signup_email_hint">Email *</string>
-	<string name="signup_password_hint">Password *</string>
+`
+	<string name="signup_intro">No account yet? No problem. Let\'s create a new account for you.</string>
+	<string name="email_hint">Email *</string>
+	<string name="password_hint">Password *</string>
 	<string name="signup_name_hint">Name *</string>
-	<string name="signup_code_hint">Code *</string>
+	<string name="code_hint">Code *</string>
 
 	<string name="next_button">Next</string>
 	<string name="error_title">Oops…</string>

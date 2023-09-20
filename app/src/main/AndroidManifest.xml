@@ -26,14 +26,18 @@
 			</intent-filter>
 		</activity>
 
-		<activity
-			android:theme="@style/TransparentFloatingActivity"
-			android:name=".ui.landing.SignupActivity">
-		</activity>
 		<activity android:name=".ui.HomeActivity"/>
-		<activity android:name=".ui.landing.LandingActivity"
+		<activity android:name=".ui.LandingActivity"
 			android:theme="@style/Theme.Design.NoActionBar"
 		/>
+		<activity
+			android:theme="@style/TransparentFloatingActivity"
+			android:name=".ui.signup.SignupActivity">
+		</activity>
+		<activity
+			android:theme="@style/TransparentFloatingActivity"
+			android:name=".ui.login.LoginActivity">
+		</activity>
 		<activity android:name=".ui.ProfileActivity"/>
 	</application>
 
