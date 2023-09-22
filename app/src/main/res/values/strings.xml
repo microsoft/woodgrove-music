@@ -33,6 +33,7 @@
 
 	<string name="invalid_code_error">That code is not correct. Please try again, or request a new code to be sent.</string>
 	<string name="resend_code">Resend code</string>
+	<string name="code_sent">New code sent</string>
 
 	<string name="home_text">Welcome to Woodgrove Music. Select your favourite tunes and start listening 🎵</string>
 	<string name="home_my_profile">My profile</string>

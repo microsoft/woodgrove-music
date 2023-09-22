@@ -163,6 +163,14 @@ class SignupCodeFragment : Fragment() {
         alertDialog.show()
     }
 
+    private fun showToast(message: String) {
+        Toast.makeText(
+            requireContext(),
+            message,
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
     private fun resendCode() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
@@ -171,10 +179,7 @@ class SignupCodeFragment : Fragment() {
                 when (actionResult) {
                     is SignUpResendCodeResult.Success -> {
                         authState = actionResult.nextState
-                        showDialog(
-                            title = "",
-                            message = "Code resent"
-                        )
+                        showToast(getString(R.string.code_sent))
                     }
                     is SignUpResult.BrowserRequired,
                     is SignUpResult.UnexpectedError -> {
@@ -194,20 +199,22 @@ class SignupCodeFragment : Fragment() {
             val actionResult = authState.signIn()
             when (actionResult) {
                 is SignInResult.Complete -> {
+                    hideLoading()
                     navigateNext()
                     requireActivity().finish()
                 }
                 is SignInResult.CodeRequired,
                 is SignInResult.PasswordRequired -> {
+                    hideLoading()
                     showGeneralError("Unexpected result: $actionResult")
                 }
                 is SignInResult.BrowserRequired,
                 is SignInResult.UserNotFound,
                 is SignInResult.UnexpectedError -> {
+                    hideLoading()
                     showGeneralError((actionResult as Result.ErrorResult).error.errorMessage)
                 }
             }
-            hideLoading()
         }
     }
 

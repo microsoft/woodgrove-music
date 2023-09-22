@@ -233,7 +233,6 @@ class SignupEmailPasswordFragment : Fragment() {
                 R.anim.slide_in_right_full,
                 R.anim.slide_out_left_full
             )
-            .addSharedElement(binding.signupEmailPasswordContainer, "signupCode_next_transitioned")
             .replace(R.id.signup_fragmentContainer, newFragment, tag)
             .commitAllowingStateLoss()
 

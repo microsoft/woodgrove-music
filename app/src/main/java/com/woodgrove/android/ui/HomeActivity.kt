@@ -14,6 +14,7 @@ class HomeActivity : Activity() {
     companion object {
         fun getStartIntent(context: Context): Intent {
             return Intent(context, HomeActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         }
     }
 
