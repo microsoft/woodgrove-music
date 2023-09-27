@@ -31,9 +31,7 @@ class HomeActivity : Activity() {
     }
 
     private fun initializeButtonListeners() {
-        binding.homeProfile.setOnClickListener {
-            navigateToProfile()
-        }
+
     }
 
     private fun navigateToProfile() {

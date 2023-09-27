@@ -22,11 +22,26 @@
 			android:layout_width="287dp"
 			android:layout_height="wrap_content"
 			android:layout_margin="20dp"
-			app:layout_constraintBottom_toTopOf="@+id/signupCode_nextContainer"
+			app:layout_constraintBottom_toTopOf="@+id/resendCode"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintVertical_chainStyle="packed"/>
+
+		<TextView
+			android:id="@+id/resendCode"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="42dp"
+			android:layout_marginEnd="40dp"
+			android:layout_marginTop="10dp"
+			android:textSize="11sp"
+			android:text="@string/not_received"
+			android:textColor="@color/theme_colour_1_darker"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/signupCode_nextContainer"/>
+
 
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/signupCode_nextContainer"

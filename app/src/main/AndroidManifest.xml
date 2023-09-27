@@ -26,7 +26,8 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".ui.HomeActivity"/>
+		<activity android:name=".ui.HomeActivity"
+			android:theme="@style/Theme.Design.NoActionBar"/>
 		<activity android:name=".ui.LandingActivity"
 			android:theme="@style/Theme.Design.NoActionBar"
 		/>
@@ -38,7 +39,8 @@
 			android:theme="@style/TransparentFloatingActivity"
 			android:name=".ui.login.LoginActivity">
 		</activity>
-		<activity android:name=".ui.ProfileActivity"/>
+		<activity android:name=".ui.ProfileActivity"
+			android:theme="@style/Theme.Design.NoActionBar"/>
 	</application>
 
 </manifest>

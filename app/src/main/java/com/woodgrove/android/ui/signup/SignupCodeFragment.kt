@@ -85,7 +85,7 @@ class SignupCodeFragment : Fragment() {
     }
 
     private fun hideLoading() {
-        binding.signupCodeNext.text = getString(R.string.next_button)
+        binding.signupCodeNext.text = getString(R.string.verify)
         binding.signupCodeNextLoader.visibility = View.GONE
     }
 

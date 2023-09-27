@@ -35,6 +35,11 @@ class LandingActivity : AppCompatActivity() {
         initializeLandingListeners()
     }
 
+    override fun onResume() {
+        super.onResume()
+        showLogo()
+    }
+
     private fun initializeLandingListeners() {
         binding.landingSignup.setOnClickListener {
             openSignupOverlay()
@@ -44,6 +49,9 @@ class LandingActivity : AppCompatActivity() {
         }
         binding.landingLogin.setOnClickListener {
             openLoginOverlay()
+            Handler(Looper.getMainLooper()).postDelayed({
+                hideLogo()
+            }, 100)
         }
     }
 
@@ -57,8 +65,13 @@ class LandingActivity : AppCompatActivity() {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }
 
-    fun hideLogo() {
+    private fun hideLogo() {
         binding.landingMainText.visibility = View.GONE
         binding.landingLogo.visibility = View.GONE
+    }
+
+    private fun showLogo() {
+        binding.landingMainText.visibility = View.VISIBLE
+        binding.landingLogo.visibility = View.VISIBLE
     }
 }
