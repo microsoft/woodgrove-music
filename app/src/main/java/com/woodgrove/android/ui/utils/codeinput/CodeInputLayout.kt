@@ -8,7 +8,6 @@ import android.graphics.RectF
 import android.text.InputType
 import android.text.TextUtils
 import android.util.AttributeSet
-import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -22,7 +21,8 @@ import java.util.regex.Pattern
 class CodeInputLayout : View {
     private lateinit var characters: FixedStack<Char>
     private lateinit var backgrounds: Array<Background?>
-    private lateinit var underlinePaint: Paint
+    private lateinit var backgroundPaint: Paint
+    private lateinit var borderPaint: Paint
     private lateinit var textPaint: Paint
     private var backgroundReduction: Float = 0.toFloat()
     private var backgroundWidth: Float = 0.toFloat()
@@ -31,6 +31,7 @@ class CodeInputLayout : View {
     private var viewHeight: Float = 0.toFloat()
     private var codeSize: Int = 0
     private var backgroundColorRes: Int = 0
+    private var borderColorRes: Int = 0
     private var textColor: Int = 0
     private var inputType = InputType.TYPE_CLASS_NUMBER
 
@@ -82,7 +83,7 @@ class CodeInputLayout : View {
     private fun init(attributeSet: AttributeSet?) {
         initDefaultAttributes()
         initDataStructures()
-        initPaint()
+        initBackgroundPaint()
         initViewOptions()
     }
 
@@ -92,6 +93,7 @@ class CodeInputLayout : View {
         textSize = context.resources.getDimension(R.dimen.text_size)
         textMarginBottom = context.resources.getDimension(R.dimen.text_margin_bottom)
         backgroundColorRes = context.resources.getColor(R.color.background)
+        borderColorRes = context.resources.getColor(R.color.theme_colour_1_darker)
         textColor = context.resources.getColor(R.color.theme_colour_1_darker)
         viewHeight = context.resources.getDimension(R.dimen.view_height)
         codeSize = defaultCodes
@@ -103,10 +105,16 @@ class CodeInputLayout : View {
         characters.maxSize = codeSize
     }
 
-    private fun initPaint() {
-        underlinePaint = Paint()
-        underlinePaint.color = backgroundColorRes
-        underlinePaint.style = Paint.Style.FILL
+    private fun initBackgroundPaint() {
+        backgroundPaint = Paint()
+        backgroundPaint.color = backgroundColorRes
+        backgroundPaint.style = Paint.Style.FILL
+
+        borderPaint = Paint()
+        borderPaint.color = borderColorRes
+        borderPaint.style = Paint.Style.STROKE
+        borderPaint.strokeWidth = 4f
+
         textPaint = Paint()
         textPaint.textSize = textSize
         textPaint.color = textColor
@@ -167,7 +175,7 @@ class CodeInputLayout : View {
     }
 
     private fun createPath(position: Int, sectionWidth: Float): Background {
-        val fromX = sectionWidth * position.toFloat()
+        val fromX = sectionWidth * position.toFloat() + 1
         return Background(fromX, 0f, fromX + sectionWidth, viewHeight)
     }
 
@@ -262,9 +270,11 @@ class CodeInputLayout : View {
 
     private fun drawSection(fromX: Float, fromY: Float, toX: Float, toY: Float,
                             canvas: Canvas) {
-        val paint = underlinePaint
-        val rect = RectF(fromX, fromY, toX, toY)
-        canvas.drawRoundRect(rect, 15f, 15f, paint)
+        val backgroundRect = RectF(fromX, fromY, toX, toY)
+        canvas.drawRoundRect(backgroundRect, 25f, 25f, backgroundPaint)
+
+        val paintRect = RectF(fromX + 2, fromY + 2, toX - 2, toY - 2)
+        canvas.drawRoundRect(paintRect, 25f, 25f, borderPaint)
     }
 
     private fun drawCharacter(fromX: Float, toX: Float, character: Char, canvas: Canvas) {

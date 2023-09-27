@@ -5,6 +5,7 @@
 	<string name="first_fragment_label">First Fragment</string>
 	<string name="second_fragment_label">Second Fragment</string>
 	<string name="next">Next</string>
+	<string name="verify">Verify</string>
 	<string name="previous">Previous</string>
 
 	<string name="launch_text">Woodgrove Music</string>
@@ -15,10 +16,12 @@
 	<string name="landing_signup">Sign up</string>
 `
 	<string name="signup_intro">No account yet? No problem. Let\'s create a new account for you.</string>
-	<string name="email_hint">Email *</string>
-	<string name="password_hint">Password *</string>
-	<string name="signup_name_hint">Name *</string>
-	<string name="code_hint">Code *</string>
+	<string name="email_hint">Email</string>
+	<string name="password_hint">Password</string>
+	<string name="signup_name_hint">Name</string>
+	<string name="signup_with_code">Sign up with one time code instead</string>
+	<string name="login_with_code">Log in with one time code instead</string>
+	<string name="code_hint">Code</string>
 
 	<string name="next_button">Next</string>
 	<string name="error_title">Oops…</string>
