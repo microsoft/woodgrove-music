@@ -25,7 +25,7 @@
 	<FrameLayout
 		android:id="@+id/landing_white_block"
 		android:layout_width="match_parent"
-		android:layout_height="250dp"
+		android:layout_height="150dp"
 		android:background="@color/white"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
@@ -77,7 +77,7 @@
 		app:backgroundTint="@null"
 		android:background="@drawable/bg_selector_white_rounded_border"
 		android:textColor="@drawable/text_selector_button"
-		android:layout_marginTop="50dp"
+		android:layout_marginTop="0dp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="@+id/landing_white_block" />
