@@ -16,6 +16,32 @@
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
+
+		<ImageView
+			android:id="@+id/landing_logo"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:elevation="10dp"
+			android:src="@drawable/woodgrove_logo"
+			android:layout_marginTop="10dp"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"/>
+
+		<TextView
+			android:id="@+id/introText"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="42dp"
+			android:layout_marginEnd="40dp"
+			android:layout_marginTop="10dp"
+			android:layout_marginBottom="20dp"
+			android:textSize="11sp"
+			android:text="@string/enter_code"
+			android:textColor="@color/theme_colour_1_darker"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintBottom_toTopOf="@+id/signupCode_codeFieldLayout"/>
 		
 		<com.woodgrove.android.ui.utils.codeinput.CodeInputLayout
 			android:id="@+id/signupCode_codeFieldLayout"
@@ -25,8 +51,7 @@
 			app:layout_constraintBottom_toTopOf="@+id/resendCode"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
-			app:layout_constraintVertical_chainStyle="packed"/>
+			app:layout_constraintTop_toBottomOf="@+id/landing_logo"/>
 
 		<TextView
 			android:id="@+id/resendCode"

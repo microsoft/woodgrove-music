@@ -22,6 +22,7 @@
 	<string name="signup_with_code">Sign up with one time code instead</string>
 	<string name="login_with_code">Log in with one time code instead</string>
 
+	<string name="enter_code">Please enter the code sent to your email</string>
 	<string name="not_received">Didn\'t receive a code? Tap here to resend it</string>
 	<string name="code_hint">Code</string>
 
