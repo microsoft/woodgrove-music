@@ -56,7 +56,7 @@
 				android:id="@+id/title_fragment"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				tools:layout="@layout/fragment_signup_email_password" />
+				tools:layout="@layout/fragment_signup_code" />
 		</FrameLayout>
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
