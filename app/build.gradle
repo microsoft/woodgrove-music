@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.woodgrove.android'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.woodgrove.android"
@@ -39,18 +39,6 @@ android {
 
 allprojects {
     repositories {
-        maven {
-            url = uri("https://maven.pkg.github.com/AzureAD/msal-android-native-auth-preview")
-            credentials {
-                username = System.getenv("GITHUB_USERNAME") != null ? System.getenv("GITHUB_USERNAME") : project.findProperty("GITHUB_USERNAME")
-                password = System.getenv("GITHUB_TOKEN") != null ? System.getenv("GITHUB_TOKEN") : project.findProperty("GITHUB_TOKEN")
-
-
-            }
-            content {
-                includeGroupByRegex "com\\.microsoft.*"
-            }
-        }
         //Needed for com.microsoft.device.display:display-mask library
         maven {
             url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
@@ -72,6 +60,8 @@ dependencies {
     implementation 'com.microsoft.identity:common:15.0.0-native-auth-1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.airbnb.android:lottie:6.1.0'
+    implementation 'com.microsoft.identity.client:msal:5.+'
+
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

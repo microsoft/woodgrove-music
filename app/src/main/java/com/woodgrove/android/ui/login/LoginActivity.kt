@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.woodgrove.android.R
 import com.woodgrove.android.databinding.ActivityLoginBinding
-import com.woodgrove.android.databinding.ActivitySignupBinding
 
 class LoginActivity : AppCompatActivity() {
 

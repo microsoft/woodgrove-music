@@ -2,6 +2,7 @@ package com.woodgrove.android.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.microsoft.identity.nativeauth.statemachine.results.GetAccountResult
 import com.woodgrove.android.databinding.ActivityLaunchBinding
 import com.woodgrove.android.utils.AuthClient
 import kotlinx.coroutines.CoroutineScope
@@ -35,6 +36,11 @@ class LaunchActivity : AppCompatActivity() {
     }
 
     private suspend fun containsAccount(): Boolean {
-        return authClient.getCurrentAccount() != null
+        val accountResult = authClient.getCurrentAccount()
+        return when (accountResult) {
+            is GetAccountResult.AccountFound -> true
+            is GetAccountResult.NoAccountFound -> false
+            else -> false // Default case
+        }
     }
 }

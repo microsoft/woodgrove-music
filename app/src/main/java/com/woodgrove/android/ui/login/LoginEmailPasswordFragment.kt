@@ -2,17 +2,15 @@ package com.woodgrove.android.ui.login
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputLayout
 import com.microsoft.identity.client.exception.MsalException
-import com.microsoft.identity.client.statemachine.results.Result
-import com.microsoft.identity.client.statemachine.results.SignInResult
+import com.microsoft.identity.nativeauth.statemachine.errors.SignInError
+import com.microsoft.identity.nativeauth.statemachine.results.SignInResult
 import com.woodgrove.android.R
 import com.woodgrove.android.databinding.FragmentLoginEmailPasswordBinding
 import com.woodgrove.android.ui.HomeActivity
@@ -99,9 +97,10 @@ class LoginEmailPasswordFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val email = binding.loginEmailField.text.toString()
-                val password = binding.loginPasswordField.text.toString()
+                val password = CharArray(binding.loginPasswordField.length())
+                binding.loginPasswordField.text?.getChars(0, binding.loginPasswordField.length(), password, 0)
 
-                val actionResult = authClient.signInUsingPassword(
+                val actionResult = authClient.signIn(
                     username = email,
                     password = password
                 )
@@ -115,12 +114,9 @@ class LoginEmailPasswordFragment : Fragment() {
                         hideLoading()
                         showGeneralError("Unexpected result: $actionResult")
                     }
-                    is SignInResult.BrowserRequired,
-                    is SignInResult.UnexpectedError,
-                    is SignInResult.InvalidCredentials,
-                    is SignInResult.UserNotFound -> {
+                    is SignInError -> {
                         hideLoading()
-                        showGeneralError((actionResult as Result.ErrorResult).error.errorMessage)
+                        showGeneralError(actionResult.errorMessage)
                     }
                 }
             } catch (exception: MsalException) {

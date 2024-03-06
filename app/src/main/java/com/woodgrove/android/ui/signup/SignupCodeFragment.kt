@@ -2,20 +2,20 @@ package com.woodgrove.android.ui.signup
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.microsoft.identity.client.exception.MsalException
-import com.microsoft.identity.client.statemachine.results.Result
-import com.microsoft.identity.client.statemachine.results.SignInResult
-import com.microsoft.identity.client.statemachine.results.SignUpResendCodeResult
-import com.microsoft.identity.client.statemachine.results.SignUpResult
-import com.microsoft.identity.client.statemachine.results.SignUpSubmitCodeResult
-import com.microsoft.identity.client.statemachine.states.SignInAfterSignUpState
-import com.microsoft.identity.client.statemachine.states.SignUpCodeRequiredState
+import com.microsoft.identity.nativeauth.statemachine.errors.SignInError
+import com.microsoft.identity.nativeauth.statemachine.errors.SignUpError
+import com.microsoft.identity.nativeauth.statemachine.results.SignInResult
+import com.microsoft.identity.nativeauth.statemachine.results.SignUpResendCodeResult
+import com.microsoft.identity.nativeauth.statemachine.results.SignUpResult
+import com.microsoft.identity.nativeauth.statemachine.states.SignInCodeRequiredState
+import com.microsoft.identity.nativeauth.statemachine.states.SignInContinuationState
+import com.microsoft.identity.nativeauth.statemachine.states.SignUpCodeRequiredState
 import com.woodgrove.android.R
 import com.woodgrove.android.databinding.FragmentSignupCodeBinding
 import com.woodgrove.android.ui.HomeActivity
@@ -32,7 +32,7 @@ class SignupCodeFragment : Fragment() {
     companion object {
         fun getNewInstance(authState: SignUpCodeRequiredState): SignupCodeFragment {
             val bundle = Bundle()
-            bundle.putSerializable(Constants.STATE, authState)
+            bundle.putParcelable(Constants.STATE, authState)
             val fragment = SignupCodeFragment()
             fragment.arguments = bundle
             return fragment
@@ -40,7 +40,8 @@ class SignupCodeFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        authState = this.arguments?.getSerializable(Constants.STATE) as SignUpCodeRequiredState
+        authState = (this.arguments?.getParcelable(Constants.STATE) as? SignUpCodeRequiredState)!!
+
 
         binding = FragmentSignupCodeBinding.inflate(inflater, container,false)
         return binding.root
@@ -103,17 +104,15 @@ class SignupCodeFragment : Fragment() {
                     is SignUpResult.Complete -> {
                         signIn(actionResult.nextState)
                     }
-                    is SignUpSubmitCodeResult.CodeIncorrect -> {
+                    is SignUpResult.PasswordRequired -> {
                         showInvalidCodeError()
                         clearCode()
                     }
                     is SignUpResult.AttributesRequired -> {
                         showGeneralError("Unexpected result: $actionResult")
                     }
-                    is SignUpResult.BrowserRequired,
-                    is SignUpResult.PasswordRequired,
-                    is SignUpResult.UnexpectedError -> {
-                        showGeneralError((actionResult as Result.ErrorResult).error.errorMessage)
+                    is  SignUpError -> {
+                        showGeneralError(actionResult.errorMessage)
                     }
                 }
             } catch (exception: MsalException) {
@@ -181,9 +180,8 @@ class SignupCodeFragment : Fragment() {
                         authState = actionResult.nextState
                         showToast(getString(R.string.code_sent))
                     }
-                    is SignUpResult.BrowserRequired,
-                    is SignUpResult.UnexpectedError -> {
-                        showGeneralError((actionResult as Result.ErrorResult).error.errorMessage)
+                    is SignUpError -> {
+                        showGeneralError(actionResult.errorMessage)
                     }
                 }
             } catch (exception: MsalException) {
@@ -193,7 +191,7 @@ class SignupCodeFragment : Fragment() {
         }
     }
 
-    private fun signIn(authState: SignInAfterSignUpState) {
+    private fun signIn(authState: SignInContinuationState) {
         showLoading()
         CoroutineScope(Dispatchers.Main).launch {
             val actionResult = authState.signIn()
@@ -208,11 +206,9 @@ class SignupCodeFragment : Fragment() {
                     hideLoading()
                     showGeneralError("Unexpected result: $actionResult")
                 }
-                is SignInResult.BrowserRequired,
-                is SignInResult.UserNotFound,
-                is SignInResult.UnexpectedError -> {
+                is SignInError -> {
                     hideLoading()
-                    showGeneralError((actionResult as Result.ErrorResult).error.errorMessage)
+                    showGeneralError(actionResult.errorMessage)
                 }
             }
         }

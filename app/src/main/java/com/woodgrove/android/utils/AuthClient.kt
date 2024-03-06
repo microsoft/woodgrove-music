@@ -2,9 +2,9 @@ package com.woodgrove.android.utils
 
 import android.content.Context
 import android.util.Log
-import com.microsoft.identity.client.INativeAuthPublicClientApplication
 import com.microsoft.identity.client.Logger
 import com.microsoft.identity.client.PublicClientApplication
+import com.microsoft.identity.nativeauth.INativeAuthPublicClientApplication
 import com.woodgrove.android.R
 
 object AuthClient {
