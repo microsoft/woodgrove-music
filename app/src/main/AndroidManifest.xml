@@ -31,16 +31,20 @@
 		<activity android:name=".ui.LandingActivity"
 			android:theme="@style/Theme.Design.NoActionBar"
 		/>
-		<activity
-			android:theme="@style/TransparentFloatingActivity"
-			android:name=".ui.signup.SignupActivity">
-		</activity>
-		<activity
-			android:theme="@style/TransparentFloatingActivity"
-			android:name=".ui.login.LoginActivity">
-		</activity>
 		<activity android:name=".ui.ProfileActivity"
 			android:theme="@style/Theme.Design.NoActionBar"/>
+		<activity
+			android:name="com.microsoft.identity.client.BrowserTabActivity"
+			android:exported="true">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="msauth"
+					android:host="com.woodgrove.android"
+					android:path="/xJQIatyO+DB1MvkjPbT8Oxwoq2A=" />
+			</intent-filter>
+		</activity>
 	</application>
 
 </manifest>
