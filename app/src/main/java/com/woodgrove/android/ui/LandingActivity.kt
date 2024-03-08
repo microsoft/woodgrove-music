@@ -87,6 +87,7 @@ class LandingActivity : AppCompatActivity() {
         return object : AuthenticationCallback {
 
             override fun onSuccess(authenticationResult: IAuthenticationResult) {
+                startActivity(HomeActivity.getStartIntent(this@LandingActivity))
             }
 
             override fun onError(exception: MsalException) {
