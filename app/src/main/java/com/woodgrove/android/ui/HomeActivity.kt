@@ -4,7 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import com.microsoft.identity.nativeauth.statemachine.results.GetAccountResult
+import com.microsoft.identity.nativeauth.statemachine.results.SignOutResult
 import com.woodgrove.android.databinding.ActivityHomeBinding
+import com.woodgrove.android.utils.AuthClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class HomeActivity : Activity() {
 
@@ -30,7 +36,17 @@ class HomeActivity : Activity() {
     }
 
     private fun initializeButtonListeners() {
-
+        binding.woodgroveHome.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                val getAccountResult = AuthClient.getAuthClient().getCurrentAccount()
+                if (getAccountResult is GetAccountResult.AccountFound) {
+                    val signOutResult = getAccountResult.resultValue.signOut()
+                    if (signOutResult is SignOutResult.Complete) {
+                        startActivity(LandingActivity.getStartIntent(this@HomeActivity))
+                    }
+                }
+            }
+        }
     }
 
     private fun navigateToProfile() {
