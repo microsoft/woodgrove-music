@@ -8,12 +8,11 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputLayout
-import com.microsoft.identity.client.UserAttributes
 import com.microsoft.identity.client.exception.MsalException
-import com.microsoft.identity.client.statemachine.results.Result
-import com.microsoft.identity.client.statemachine.results.SignUpResult
-import com.microsoft.identity.client.statemachine.results.SignUpUsingPasswordResult
-import com.microsoft.identity.client.statemachine.states.SignUpCodeRequiredState
+import com.microsoft.identity.nativeauth.UserAttributes
+import com.microsoft.identity.nativeauth.statemachine.errors.SignUpError
+import com.microsoft.identity.nativeauth.statemachine.results.SignUpResult
+import com.microsoft.identity.nativeauth.statemachine.states.SignUpCodeRequiredState
 import com.woodgrove.android.R
 import com.woodgrove.android.databinding.FragmentSignupEmailPasswordBinding
 import com.woodgrove.android.ui.login.LoginActivity
@@ -34,7 +33,7 @@ class SignupEmailPasswordFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSignupEmailPasswordBinding.inflate(inflater, container,false)
-        return binding.root;
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -108,14 +107,15 @@ class SignupEmailPasswordFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val email = binding.signupEmailField.text.toString()
-                val password = binding.signupPasswordField.text.toString()
+                val password = CharArray(binding.signupPasswordField.length())
+                binding.signupPasswordField.text?.getChars(0, binding.signupPasswordField.length(), password, 0)
                 val name = binding.signupNameField.text.toString()
 
                 val attributes = UserAttributes.Builder
                     .displayName(name)
                     .build()
 
-                val actionResult = authClient.signUpUsingPassword(
+                val actionResult = authClient.signUp(
                     username = email,
                     password = password,
                     attributes = attributes
@@ -126,30 +126,20 @@ class SignupEmailPasswordFragment : Fragment() {
                         hideLoading()
                         navigateNext(actionResult.nextState)
                     }
-                    is SignUpResult.UserAlreadyExists -> {
+                    is SignUpError -> {
                         hideLoading()
-                        showUserAlreadyExistsError()
-                    }
-                    is SignUpResult.InvalidEmail -> {
-                        hideLoading()
-                        showInvalidEmailError()
-                    }
-                    is SignUpResult.InvalidPassword -> {
-                        hideLoading()
-                        showInvalidPasswordError()
-                    }
-                    is SignUpResult.InvalidAttributes -> {
-                        hideLoading()
-                        showInvalidNameError()
-                    }
-                    is SignUpResult.AttributesRequired, is SignUpResult.Complete -> {
-                        hideLoading()
-                        showGeneralError("Unexpected result: $actionResult")
-                    }
-                    is SignUpUsingPasswordResult.AuthNotSupported,
-                    is SignUpResult.UnexpectedError, is SignUpResult.BrowserRequired -> {
-                        hideLoading()
-                        showGeneralError((actionResult as Result.ErrorResult).error.errorMessage)
+                        if (actionResult.isInvalidPassword()){
+                            showInvalidPasswordError()
+                        }
+                        else if (actionResult.isInvalidUsername()){
+                            showInvalidEmailError()
+                        }
+                        else if (actionResult.isUserAlreadyExists()) {
+                            showUserAlreadyExistsError()
+                        }
+                        else {
+                            showGeneralError(actionResult.errorMessage)
+                        }
                     }
                 }
             } catch (exception: MsalException) {
