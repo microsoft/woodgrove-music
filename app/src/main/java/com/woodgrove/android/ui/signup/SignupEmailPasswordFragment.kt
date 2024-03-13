@@ -9,6 +9,8 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import com.microsoft.identity.client.exception.MsalException
 import com.microsoft.identity.nativeauth.UserAttributes
@@ -49,34 +51,55 @@ class SignupEmailPasswordFragment : Fragment() {
     }
 
     private fun initializeLandingListeners() {
-        binding.signupEmailField.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                val inputText = binding.signupEmailField.text.toString().trim()
-                if (inputText.isNotEmpty() && !isValidEmail(inputText)) {
-                    validationState[0] = false
-                    binding.emailFieldLayout.error = "Invalid email address"
-                } else {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val result = authClient.signUp(inputText)
-                        if (result is SignUpError && result.isUserAlreadyExists()) {
-                            validationState[0] = false
-                            binding.emailFieldLayout.error = "Email already exists"
-                        } else {
-                            validationState[0] = true
-                            binding.emailFieldLayout.error = null
-                            validateInputFields()
-                        }
+        val emailFieldLayout = binding.emailFieldLayout
+        val passwordFieldLayout = binding.passwordFieldLayout
+
+
+        fun validateEmail(inputText: String) {
+            val formatValid = inputText.isNotEmpty() && isEmailPattern(inputText)
+            if (!formatValid) {
+                    emailFieldLayout.error = "Invalid email address"
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val result = authClient.signUp(inputText)
+                    if (result is SignUpError && result.isUserAlreadyExists()) {
+                        emailFieldLayout.error = "Email already exists"
+                    } else {
+                        validationState[0] = true
+                        validateInputFields()
                     }
                 }
+            }
+        }
+
+        fun validatePassword(inputText: String) {
+            var formatValid = inputText.isNotEmpty() && isPasswordPattern(inputText)
+            if (inputText.isNotEmpty() && !isPasswordPattern(inputText)) {
+                binding.passwordFieldLayout.error = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one digit."
             } else {
+                binding.passwordFieldLayout.error = null
+                validationState[1] = true
+                validateInputFields()
+            }
+        }
+
+        binding.signupEmailField.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                // Do the validation when user switches to another field
+                val inputText = binding.signupEmailField.text.toString().trim()
+                validateEmail(inputText)
+            } else {
+                // 1. The goal first focus = true
+                // 2. The field has been placed as empty and start texting
                 if (isFirstFocus[0]) {
-                    isFirstFocus[0] = false
+                    isFirstFocus[0] = false  // Once typed, then false
                 }
             }
         }
 
         binding.signupEmailField.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // If the field is empty, set as the first focus. Go into isFirstFocus[0] validation way.
                 if (s.isNullOrBlank()) {
                     isFirstFocus[0] = true
                 }
@@ -88,24 +111,16 @@ class SignupEmailPasswordFragment : Fragment() {
                 val inputText = s.toString().trim()
 
                 if (isFirstFocus[0]) {
-                    if (!isValidEmail(inputText)) {
-                        validationState[0] = false
-                        binding.emailFieldLayout.error = null
+                    // The field has been placed as empty and start texting. No validation triggered during texting
+                    if (!isEmailPattern(inputText)) {
+                        emailFieldLayout.error = null
                     }
                 } else {
-                    if (!isValidEmail(inputText) && inputText.isNotEmpty()) {
-                        validationState[0] = false
-                        binding.emailFieldLayout.error = "Invalid email address"
+                    // Once typed, then false. It will trigger the validation when text.
+                    if (isEmailPattern(inputText)) {
+                        emailFieldLayout.error = null
                     }
-                    if (inputText.isEmpty()) {
-                        validationState[0] = false
-                        validateInputFields()
-                    }
-                    if (isValidEmail(inputText)) {
-                        validationState[0] = true
-                        binding.emailFieldLayout.error = null
-                        validateInputFields()
-                    }
+                    validateEmail(inputText)
                 }
             }
         })
@@ -113,14 +128,8 @@ class SignupEmailPasswordFragment : Fragment() {
         binding.signupPasswordField.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val inputText = binding.signupPasswordField.text.toString().trim()
-                if (inputText.isNotEmpty() && !isValidPassword(inputText)) {
-                    validationState[1] = false
-                    binding.passwordFieldLayout.error = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one digit."
-                } else {
-                    validationState[1] = true
-                    binding.passwordFieldLayout.error = null
-                    validateInputFields()
-                }
+                validatePassword(inputText)
+
             } else {
                 if (isFirstFocus[1]) {
                     isFirstFocus[1] = false
@@ -149,24 +158,14 @@ class SignupEmailPasswordFragment : Fragment() {
                 val inputText = s.toString().trim()
 
                 if (isFirstFocus[1]) {
-                    if (!isValidPassword(inputText)) {
-                        validationState[1] = false
-                        binding.passwordFieldLayout.error = null
+                    if (!isPasswordPattern(inputText)) {
+                        emailFieldLayout.error = null
                     }
                 } else {
-                    if (!isValidPassword(inputText) && inputText.isNotEmpty()) {
-                        validationState[1] = false
-                        binding.passwordFieldLayout.error = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one digit."
+                    if (isPasswordPattern(inputText)) {
+                        emailFieldLayout.error = null
                     }
-                    if (inputText.isEmpty()) {
-                        validationState[1] = false
-                        validateInputFields()
-                    }
-                    if (isValidPassword(inputText)) {
-                        validationState[1] = true
-                        binding.passwordFieldLayout.error = null
-                        validateInputFields()
-                    }
+                    validatePassword(inputText)
                 }
             }
         })
@@ -345,11 +344,11 @@ class SignupEmailPasswordFragment : Fragment() {
         localFragmentManager.executePendingTransactions()
     }
 
-    private fun isValidEmail(email: String): Boolean {
+    private fun isEmailPattern(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    private fun isValidPassword(password: String): Boolean {
+    private fun isPasswordPattern(password: String): Boolean {
         val pattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$".toRegex()
         return pattern.matches(password)
     }
