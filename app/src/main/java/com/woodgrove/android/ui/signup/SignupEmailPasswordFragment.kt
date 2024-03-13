@@ -30,7 +30,8 @@ class SignupEmailPasswordFragment : Fragment() {
     private lateinit var binding: FragmentSignupEmailPasswordBinding
     private val authClient = AuthClient.getAuthClient()
     private var validationState = arrayListOf(false,false,false)
-    private var isFirstFocus = true
+    private var isFirstFocus = arrayListOf(true,true,true)
+    private var passwordSign = true
 
     companion object {
         fun getNewInstance() = SignupEmailPasswordFragment()
@@ -48,94 +49,141 @@ class SignupEmailPasswordFragment : Fragment() {
     }
 
     private fun initializeLandingListeners() {
-        binding.signupEmailField.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // This method is called before the text is changed.
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // This method is called whenever the text is changed.
-                val inputText = s.toString().trim()
-                if (!isValidEmail(inputText)) {
+        binding.signupEmailField.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val inputText = binding.signupEmailField.text.toString().trim()
+                if (inputText.isNotEmpty() && !isValidEmail(inputText)) {
                     validationState[0] = false
                     binding.emailFieldLayout.error = "Invalid email address"
-                }
-                else {
-                    validationState[0] = true
-                    binding.emailFieldLayout.error = null // Clear the error
-                }
-                validateInputFields()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // This method is called after the text is changed.
-                val inputText = s.toString().trim()
-                if (isValidEmail(inputText)) {
+                } else {
                     CoroutineScope(Dispatchers.Main).launch {
                         val result = authClient.signUp(inputText)
                         if (result is SignUpError && result.isUserAlreadyExists()) {
                             validationState[0] = false
                             binding.emailFieldLayout.error = "Email already exists"
+                        } else {
+                            validationState[0] = true
+                            binding.emailFieldLayout.error = null
+                            validateInputFields()
                         }
+                    }
+                }
+            } else {
+                if (isFirstFocus[0]) {
+                    isFirstFocus[0] = false
+                }
+            }
+        }
+
+        binding.signupEmailField.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                if (s.isNullOrBlank()) {
+                    isFirstFocus[0] = true
+                }
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val inputText = s.toString().trim()
+
+                if (isFirstFocus[0]) {
+                    if (!isValidEmail(inputText)) {
+                        validationState[0] = false
+                        binding.emailFieldLayout.error = null
+                    }
+                } else {
+                    if (!isValidEmail(inputText) && inputText.isNotEmpty()) {
+                        validationState[0] = false
+                        binding.emailFieldLayout.error = "Invalid email address"
+                    }
+                    if (inputText.isEmpty()) {
+                        validationState[0] = false
+                        validateInputFields()
+                    }
+                    if (isValidEmail(inputText)) {
+                        validationState[0] = true
+                        binding.emailFieldLayout.error = null
+                        validateInputFields()
                     }
                 }
             }
         })
 
-        binding.signupPasswordField.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus && isFirstFocus) {
-                binding.signupPasswordField.text = Editable.Factory.getInstance()
-                    .newEditable(PasswordGenerator.generatePassword(8))
-                binding.signupPasswordField.setSelection(binding.signupPasswordField.text?.length ?: 0)
-                binding.signupPasswordField.requestFocus()
-                binding.signupPasswordField.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                isFirstFocus = false
+        binding.signupPasswordField.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val inputText = binding.signupPasswordField.text.toString().trim()
+                if (inputText.isNotEmpty() && !isValidPassword(inputText)) {
+                    validationState[1] = false
+                    binding.passwordFieldLayout.error = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one digit."
+                } else {
+                    validationState[1] = true
+                    binding.passwordFieldLayout.error = null
+                    validateInputFields()
+                }
+            } else {
+                if (isFirstFocus[1]) {
+                    isFirstFocus[1] = false
+                }
+
+                if (passwordSign) {
+                    binding.signupPasswordField.text = Editable.Factory.getInstance()
+                        .newEditable(PasswordGenerator.generatePassword(8))
+                    binding.signupPasswordField.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                    binding.signupPasswordField.setSelection(8)
+                    passwordSign = false
+                }
             }
         }
 
         binding.signupPasswordField.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // This method is called before the text is changed.
+                if (s.isNullOrBlank()) {
+                    isFirstFocus[1] = true
+                }
             }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // This method is called whenever the text is changed.
-                val inputText = s.toString().trim()
-                if (!isValidPassword(inputText)) {
-                    validationState[1] = false
-                    binding.passwordFieldLayout.error = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one digit."
-                } else {
-                    validationState[1] = true
-                    binding.passwordFieldLayout.error = null // Clear error
-                }
-                validateInputFields()
-            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                // This method is called after the text is changed.
+                val inputText = s.toString().trim()
+
+                if (isFirstFocus[1]) {
+                    if (!isValidPassword(inputText)) {
+                        validationState[1] = false
+                        binding.passwordFieldLayout.error = null
+                    }
+                } else {
+                    if (!isValidPassword(inputText) && inputText.isNotEmpty()) {
+                        validationState[1] = false
+                        binding.passwordFieldLayout.error = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one digit."
+                    }
+                    if (inputText.isEmpty()) {
+                        validationState[1] = false
+                        validateInputFields()
+                    }
+                    if (isValidPassword(inputText)) {
+                        validationState[1] = true
+                        binding.passwordFieldLayout.error = null
+                        validateInputFields()
+                    }
+                }
             }
         })
 
         binding.signupNameField.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // This method is called before the text is changed.
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // This method is called whenever the text is changed.
-                val inputText = s.toString().trim()
-                if (inputText.isEmpty()) {
-                    validationState[2] = false
-                    binding.nameFieldLayout.error = "Empty name"
-                } else {
-                    validationState[2] = true
-                    binding.nameFieldLayout.error = null // Clear error
-                }
+                validationState[2] = s.toString().isNotEmpty()
                 validateInputFields()
             }
 
             override fun afterTextChanged(s: Editable?) {
-                // This method is called after the text is changed.
+                if (s.toString().isEmpty()) {
+                    validationState[1] = false
+                    validateInputFields()
+                }
             }
         })
 
