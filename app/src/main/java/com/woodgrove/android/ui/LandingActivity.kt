@@ -38,6 +38,7 @@ class LandingActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         showLogo()
+        showButtons()
     }
 
     private fun initializeLandingListeners() {
@@ -45,12 +46,14 @@ class LandingActivity : AppCompatActivity() {
             openSignupOverlay()
             Handler(Looper.getMainLooper()).postDelayed({
                 hideLogo()
+                hideButtons()
             }, 100)
         }
         binding.landingLogin.setOnClickListener {
             openLoginOverlay()
             Handler(Looper.getMainLooper()).postDelayed({
                 hideLogo()
+                hideButtons()
             }, 100)
         }
     }
@@ -73,5 +76,15 @@ class LandingActivity : AppCompatActivity() {
     private fun showLogo() {
         binding.landingMainText.visibility = View.VISIBLE
         binding.landingLogo.visibility = View.VISIBLE
+    }
+
+    private fun hideButtons() {
+        binding.landingSignup.visibility = View.GONE
+        binding.landingLogin.visibility = View.GONE
+    }
+
+    private fun showButtons() {
+        binding.landingSignup.visibility = View.VISIBLE
+        binding.landingLogin.visibility = View.VISIBLE
     }
 }
