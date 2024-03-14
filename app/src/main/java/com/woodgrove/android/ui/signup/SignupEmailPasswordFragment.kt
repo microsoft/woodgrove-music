@@ -76,17 +76,17 @@ class SignupEmailPasswordFragment : Fragment() {
             nextButton.isEnabled = !validationState.contains(false)
         }
 
-        fun validateEmail(inputText: String) {
+        fun validateEmail(inputText: String, validationError: Boolean = true) {
             val formatValid = inputText.isNotEmpty() && isEmailPattern(inputText)
             if (!formatValid) {
-                emailFieldLayout.error = "Invalid email address"
+                emailFieldLayout.error = if (validationError) "Non-compliance with e-mail format" else null
                 validationState[0] = false
                 switchNextButton()
             } else {
                 CoroutineScope(Dispatchers.Main).launch {
                     val result = authClient.signUp(inputText)
-                    if (result is SignUpError && result.isUserAlreadyExists()) {
-                        emailFieldLayout.error = "Email already exists"
+                    if (result is SignUpError && result.isInvalidUsername()) {
+                        emailFieldLayout.error = "Invalid user name"
                         validationState[0] = false
                         switchNextButton()
                     } else {
@@ -97,10 +97,10 @@ class SignupEmailPasswordFragment : Fragment() {
             }
         }
 
-        fun validatePassword(inputText: String) {
+        fun validatePassword(inputText: String, validationError: Boolean = true) {
             val formatValid = inputText.isNotEmpty() && isPasswordPattern(inputText)
             if (!formatValid) {
-                passwordFieldLayout.error = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one digit."
+                passwordFieldLayout.error = if (validationError) "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one digit." else null
                 validationState[1] = false
                 switchNextButton()
             } else {
@@ -138,9 +138,7 @@ class SignupEmailPasswordFragment : Fragment() {
 
                 if (isFirstFocus[0]) {
                     // The field has been placed as empty and start texting. No validation triggered during texting
-                    if (!isEmailPattern(inputText)) {
-                        emailFieldLayout.error = null
-                    }
+                    validateEmail(inputText, false)
                 } else {
                     // Once typed, then false. It will trigger the validation when text.
                     if (isEmailPattern(inputText)) {
@@ -179,9 +177,7 @@ class SignupEmailPasswordFragment : Fragment() {
                 val inputText = s.toString().trim()
 
                 if (isFirstFocus[1]) {
-                    if (!isPasswordPattern(inputText)) {
-                        passwordFieldLayout.error = null
-                    }
+                    validatePassword(inputText, false)
                 } else {
                     if (isPasswordPattern(inputText)) {
                         passwordFieldLayout.error = null
