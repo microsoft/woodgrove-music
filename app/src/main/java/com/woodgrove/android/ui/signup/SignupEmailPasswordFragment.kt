@@ -70,10 +70,6 @@ class SignupEmailPasswordFragment : Fragment() {
                     showInvalidEmailError()
                     validationState[0] = false
                     switchNextButton()
-                } else if (result is SignUpError && result.isUserAlreadyExists()) {
-                    showUserAlreadyExistsError(inputText)
-                    validationState[0] = false
-                    switchNextButton()
                 } else {
                     binding.emailFieldLayout.error = null
                     validationState[0] = true
