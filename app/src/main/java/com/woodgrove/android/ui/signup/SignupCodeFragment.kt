@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.microsoft.identity.client.exception.MsalException
 import com.microsoft.identity.nativeauth.statemachine.errors.SignInError
 import com.microsoft.identity.nativeauth.statemachine.errors.SignUpError
+import com.microsoft.identity.nativeauth.statemachine.errors.SubmitCodeError
 import com.microsoft.identity.nativeauth.statemachine.results.SignInResult
 import com.microsoft.identity.nativeauth.statemachine.results.SignUpResendCodeResult
 import com.microsoft.identity.nativeauth.statemachine.results.SignUpResult
@@ -111,8 +112,9 @@ class SignupCodeFragment : Fragment() {
                     is SignUpResult.AttributesRequired -> {
                         showGeneralError("Unexpected result: $actionResult")
                     }
-                    is  SignUpError -> {
-                        showGeneralError(actionResult.errorMessage)
+                    is SubmitCodeError -> {
+                        showInvalidCodeError()
+                        clearCode()
                     }
                 }
             } catch (exception: MsalException) {

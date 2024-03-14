@@ -53,10 +53,10 @@ class SignupEmailPasswordFragment : Fragment() {
         val passwordField = binding.signupPasswordField
 
         fun fillPassword() {
-            passwordField.text = Editable.Factory.getInstance()
-                .newEditable(PasswordGenerator.generatePassword(8))
-            passwordField.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            passwordField.setSelection(8)
+//            passwordField.text = Editable.Factory.getInstance()
+//                .newEditable(PasswordGenerator.generatePassword(8))
+//            passwordField.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+//            passwordField.setSelection(8)
         }
 
         fun switchNextButton() {
@@ -217,7 +217,7 @@ class SignupEmailPasswordFragment : Fragment() {
 
         alertDialog.show()
 
-        binding.nameFieldLayout.error = getString(R.string.user_exists_error_message)
+        binding.emailFieldLayout.error = getString(R.string.user_exists_error_message)
     }
 
     private fun showGeneralError(errorMsg: String?) {
