@@ -32,7 +32,6 @@ class SignupEmailPasswordFragment : Fragment() {
     private lateinit var binding: FragmentSignupEmailPasswordBinding
     private val authClient = AuthClient.getAuthClient()
     private var validationState = arrayListOf(false,false,false)
-    private var isFirstFocus = arrayListOf(true,true,true)
     private var passwordSign = true
 
     companion object {
@@ -51,19 +50,7 @@ class SignupEmailPasswordFragment : Fragment() {
     }
 
     private fun initializeLandingListeners() {
-        val emailFieldLayout = binding.emailFieldLayout
-        val passwordFieldLayout = binding.passwordFieldLayout
         val passwordField = binding.signupPasswordField
-        val nextButton = binding.signupEmailPasswordNext
-
-        fun isEmailPattern(email: String): Boolean {
-            return Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        }
-
-        fun isPasswordPattern(password: String): Boolean {
-            val pattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$".toRegex()
-            return pattern.matches(password)
-        }
 
         fun fillPassword() {
             passwordField.text = Editable.Factory.getInstance()
@@ -73,90 +60,36 @@ class SignupEmailPasswordFragment : Fragment() {
         }
 
         fun switchNextButton() {
-            nextButton.isEnabled = !validationState.contains(false)
+            binding.signupEmailPasswordNext.isEnabled = !validationState.contains(false)
         }
 
-        fun validateEmail(inputText: String, validationError: Boolean = true) {
-            val formatValid = inputText.isNotEmpty() && isEmailPattern(inputText)
-            if (!formatValid) {
-                emailFieldLayout.error = if (validationError) "Non-compliance with e-mail format" else null
-                validationState[0] = false
-                switchNextButton()
-            } else {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val result = authClient.signUp(inputText)
-                    if (result is SignUpError && result.isInvalidUsername()) {
-                        emailFieldLayout.error = "Invalid user name"
-                        validationState[0] = false
-                        switchNextButton()
-                    } else {
-                        validationState[0] = true
-                        switchNextButton()
-                    }
+        fun validateEmail(inputText: String) {
+            CoroutineScope(Dispatchers.Main).launch {
+                val result = authClient.signUp(inputText)
+                if (result is SignUpError && result.isInvalidUsername()) {
+                    showInvalidEmailError()
+                    validationState[0] = false
+                    switchNextButton()
+                } else if (result is SignUpError && result.isUserAlreadyExists()) {
+                    showUserAlreadyExistsError(inputText)
+                    validationState[0] = false
+                    switchNextButton()
+                } else {
+                    binding.emailFieldLayout.error = null
+                    validationState[0] = true
+                    switchNextButton()
                 }
-            }
-        }
-
-        fun validatePassword(inputText: String, validationError: Boolean = true) {
-            val formatValid = inputText.isNotEmpty() && isPasswordPattern(inputText)
-            if (!formatValid) {
-                passwordFieldLayout.error = if (validationError) "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one digit." else null
-                validationState[1] = false
-                switchNextButton()
-            } else {
-                passwordFieldLayout.error = null
-                validationState[1] = true
-                switchNextButton()
             }
         }
 
         binding.signupEmailField.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
-                // Do the validation when user switches to another field
                 validateEmail(binding.signupEmailField.text.toString().trim())
-            } else {
-                // 1. The goal first focus = true
-                // 2. The field has been placed as empty and start texting
-                if (isFirstFocus[0]) {
-                    isFirstFocus[0] = false  // Once typed, then false
-                }
             }
         }
 
-        binding.signupEmailField.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // If the field is empty, set as the first focus. Go into isFirstFocus[0] validation way.
-                if (s.isNullOrBlank()) {
-                    isFirstFocus[0] = true
-                }
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                val inputText = s.toString().trim()
-
-                if (isFirstFocus[0]) {
-                    // The field has been placed as empty and start texting. No validation triggered during texting
-                    validateEmail(inputText, false)
-                } else {
-                    // Once typed, then false. It will trigger the validation when text.
-                    if (isEmailPattern(inputText)) {
-                        emailFieldLayout.error = null
-                    }
-                    validateEmail(inputText)
-                }
-            }
-        })
-
         binding.signupPasswordField.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                validatePassword(binding.signupPasswordField.text.toString().trim())
-            } else {
-                if (isFirstFocus[1]) {
-                    isFirstFocus[1] = false
-                }
-
+            if (hasFocus) {
                 if (passwordSign) {
                     fillPassword()
                     passwordSign = false
@@ -164,26 +97,25 @@ class SignupEmailPasswordFragment : Fragment() {
             }
         }
 
-        binding.signupPasswordField.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                if (s.isNullOrBlank()) {
-                    isFirstFocus[1] = true
-                }
-            }
+        binding.signupEmailField.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                val inputText = s.toString().trim()
+                validationState[0] = s.toString().isNotEmpty()
+                switchNextButton()
+            }
+        })
 
-                if (isFirstFocus[1]) {
-                    validatePassword(inputText, false)
-                } else {
-                    if (isPasswordPattern(inputText)) {
-                        passwordFieldLayout.error = null
-                    }
-                    validatePassword(inputText)
-                }
+        binding.signupPasswordField.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                validationState[1] = s.toString().isNotEmpty()
+                switchNextButton()
             }
         })
 
@@ -288,6 +220,8 @@ class SignupEmailPasswordFragment : Fragment() {
             .create()
 
         alertDialog.show()
+
+        binding.nameFieldLayout.error = getString(R.string.user_exists_error_message)
     }
 
     private fun showGeneralError(errorMsg: String?) {
