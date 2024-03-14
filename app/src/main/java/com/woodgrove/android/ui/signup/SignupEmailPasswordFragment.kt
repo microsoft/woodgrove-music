@@ -216,8 +216,6 @@ class SignupEmailPasswordFragment : Fragment() {
             .create()
 
         alertDialog.show()
-
-        binding.nameFieldLayout.error = getString(R.string.user_exists_error_message)
     }
 
     private fun showGeneralError(errorMsg: String?) {
