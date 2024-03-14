@@ -1,7 +1,9 @@
 package com.woodgrove.android.utils
 
-interface Constants {
-    companion object {
-        const val STATE = "state"
+object Constants {
+    const val STATE = "state"
+
+    object Intent {
+        const val USERNAME = "username"
     }
 }
