@@ -77,14 +77,14 @@ class SignupEmailPasswordFragment : Fragment() {
                 is SignUpError -> {
                     hideLoading()
                     when {
+                        actionResult.isUserAlreadyExists() -> {
+                            showUserAlreadyExistsError()
+                        }
                         actionResult.isInvalidPassword() ->  {
                             showInvalidPasswordError()
                         }
                         actionResult.isInvalidUsername() -> {
                             showInvalidEmailError()
-                        }
-                        actionResult.isUserAlreadyExists() -> {
-                            showUserAlreadyExistsError()
                         }
                         else -> {
                             showGeneralError(actionResult.errorMessage)
