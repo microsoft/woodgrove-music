@@ -15,13 +15,6 @@ object AuthClient {
     }
 
     fun initialize(context: Context) {
-        Logger.getInstance().setExternalLogger { tag, logLevel, message, containsPII ->
-            Log.e(
-                "MSAL",
-                "$tag $logLevel $message"
-            )
-        }
-
         authClient = PublicClientApplication.createNativeAuthPublicClientApplication(
             context,
             R.raw.msal_app_config

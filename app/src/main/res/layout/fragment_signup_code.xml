@@ -89,7 +89,7 @@
 				app:backgroundTint="@null"
 				android:background="@drawable/bg_selector_white_rounded_border"
 				android:textColor="@drawable/text_selector_button"
-				android:enabled="false"
+				android:enabled="true"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
