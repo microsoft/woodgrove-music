@@ -15,7 +15,7 @@ import com.microsoft.identity.nativeauth.statemachine.errors.SignInError
 import com.microsoft.identity.nativeauth.statemachine.results.SignInResult
 import com.woodgrove.android.R
 import com.woodgrove.android.databinding.FragmentLoginEmailPasswordBinding
-import com.woodgrove.android.ui.HomeActivity
+import com.woodgrove.android.ui.home.HomeActivity
 import com.woodgrove.android.utils.AuthClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

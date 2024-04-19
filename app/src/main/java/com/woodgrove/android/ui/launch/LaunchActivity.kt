@@ -1,9 +1,11 @@
-package com.woodgrove.android.ui
+package com.woodgrove.android.ui.launch
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.microsoft.identity.nativeauth.statemachine.results.GetAccountResult
 import com.woodgrove.android.databinding.ActivityLaunchBinding
+import com.woodgrove.android.ui.home.HomeActivity
+import com.woodgrove.android.ui.landing.LandingActivity
 import com.woodgrove.android.utils.AuthClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,14 +27,15 @@ class LaunchActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        CoroutineScope(Dispatchers.Main).launch {
-            if (containsAccount()) {
-                startActivity(HomeActivity.getStartIntent(this@LaunchActivity))
-            } else {
-                startActivity(LandingActivity.getStartIntent(this@LaunchActivity))
-            }
-            finish()
-        }
+        startActivity(HomeActivity.getStartIntent(this@LaunchActivity))
+//        CoroutineScope(Dispatchers.Main).launch {
+//            if (containsAccount()) {
+//                startActivity(HomeActivity.getStartIntent(this@LaunchActivity))
+//            } else {
+//                startActivity(LandingActivity.getStartIntent(this@LaunchActivity))
+//            }
+//            finish()
+//        }
     }
 
     private suspend fun containsAccount(): Boolean {
