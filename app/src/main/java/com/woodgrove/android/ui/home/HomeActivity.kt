@@ -34,16 +34,16 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initialiseTabs() {
-        val feedFragment = FeedFragment()
         val discoverFragment = DiscoverFragment()
+        val feedFragment = FeedFragment()
         val myMusicFragment = MyMusicFragment()
 
-        setFragment(feedFragment, getString(R.string.title_feed))
+        setFragment(discoverFragment, getString(R.string.title_discover))
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.feed -> setFragment(feedFragment, it.title.toString())
                 R.id.discover -> setFragment(discoverFragment, it.title.toString())
+                R.id.feed -> setFragment(feedFragment, it.title.toString())
                 R.id.my_music -> setFragment(myMusicFragment, it.title.toString())
             }
             true
