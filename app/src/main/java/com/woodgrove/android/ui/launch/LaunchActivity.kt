@@ -27,15 +27,14 @@ class LaunchActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        startActivity(HomeActivity.getStartIntent(this@LaunchActivity))
-//        CoroutineScope(Dispatchers.Main).launch {
-//            if (containsAccount()) {
-//                startActivity(HomeActivity.getStartIntent(this@LaunchActivity))
-//            } else {
-//                startActivity(LandingActivity.getStartIntent(this@LaunchActivity))
-//            }
-//            finish()
-//        }
+        CoroutineScope(Dispatchers.Main).launch {
+            if (containsAccount()) {
+                startActivity(HomeActivity.getStartIntent(this@LaunchActivity))
+            } else {
+                startActivity(LandingActivity.getStartIntent(this@LaunchActivity))
+            }
+            finish()
+        }
     }
 
     private suspend fun containsAccount(): Boolean {
