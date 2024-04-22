@@ -45,4 +45,8 @@
 	<string name="home_my_profile">My profile</string>
 
 	<string name="profile_text">Profile</string>
+
+	<string name="title_feed">Feed</string>
+	<string name="title_discover">Discover</string>
+	<string name="title_my_music">My Music</string>
 </resources>

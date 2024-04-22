@@ -5,7 +5,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".ui.LaunchActivity">
+	tools:context=".ui.launch.LaunchActivity">
 
 	<com.airbnb.lottie.LottieAnimationView
 		android:id="@+id/animation_view"
@@ -19,7 +19,7 @@
 		android:elevation="-10dp"
 		app:lottie_rawRes="@raw/lottie_background"
 		app:lottie_loop="true"
-		app:lottie_autoPlay="true"
+		app:lottie_autoPlay="false"
 		/>
 
 	<FrameLayout
