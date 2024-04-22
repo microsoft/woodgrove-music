@@ -1,4 +1,4 @@
-package com.woodgrove.android.ui
+package com.woodgrove.android.ui.profile
 
 import android.content.Context
 import android.content.Intent
