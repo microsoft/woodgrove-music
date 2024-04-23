@@ -57,6 +57,9 @@ class SignupCodeFragment : Fragment() {
             showLoading()
             validateCode()
         }
+        binding.resendCode.setOnClickListener {
+            resendCode()
+        }
     }
 
     private fun validateCode() {
@@ -74,7 +77,7 @@ class SignupCodeFragment : Fragment() {
                             showInvalidCodeError()
                         }
                         else -> {
-                            showGeneralError(actionResult.errorMessage)
+                            showGeneralError()
                         }
                     }
                 }
@@ -107,9 +110,9 @@ class SignupCodeFragment : Fragment() {
         alertDialog.show()
     }
 
-    private fun showGeneralError(errorMsg: String?) {
+    private fun showGeneralError() {
         val title = getString(R.string.error_title)
-        val message = getString(R.string.general_error_message, errorMsg)
+        val message = getString(R.string.general_error_message)
         showDialog(title, message)
     }
 
@@ -145,11 +148,11 @@ class SignupCodeFragment : Fragment() {
                         showToast(getString(R.string.code_sent))
                     }
                     is SignUpError -> {
-                        showGeneralError(actionResult.errorMessage)
+                        showGeneralError()
                     }
                 }
             } catch (exception: MsalException) {
-                showGeneralError(exception.message.toString())
+                showGeneralError()
             }
             hideLoading()
         }
@@ -168,11 +171,11 @@ class SignupCodeFragment : Fragment() {
                 is SignInResult.CodeRequired,
                 is SignInResult.PasswordRequired -> {
                     hideLoading()
-                    showGeneralError("Unexpected result: $actionResult")
+                    showGeneralError()
                 }
                 is SignInError -> {
                     hideLoading()
-                    showGeneralError(actionResult.errorMessage)
+                    showGeneralError()
                 }
             }
         }

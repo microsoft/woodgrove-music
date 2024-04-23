@@ -1,15 +1,11 @@
 package com.woodgrove.android.ui.login
 
 import android.app.AlertDialog
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.google.android.material.textfield.TextInputLayout
 import com.microsoft.identity.client.exception.MsalException
 import com.microsoft.identity.nativeauth.statemachine.errors.SignInError
 import com.microsoft.identity.nativeauth.statemachine.results.SignInResult
@@ -36,69 +32,17 @@ class LoginEmailPasswordFragment : Fragment() {
         return binding.root;
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeLandingListeners()
+        initializeListeners()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun initializeLandingListeners() {
-        binding.loginEmailField.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                binding.loginEmailField.setAutofillHints(View.AUTOFILL_HINT_USERNAME)
-            }
-        }
-
-        binding.loginPasswordField.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                binding.loginPasswordField.setAutofillHints(View.AUTOFILL_HINT_PASSWORD)
-            }
-        }
-
-
-
-        binding.loginEmailField.addTextChangedListener {
-            // Clear any previously set errors
-            clearErrors(binding.emailFieldLayout)
-
-            // Check if all fields are set, and "next" button can be enabled
-            validateInputFields()
-        }
-        binding.loginPasswordField.addTextChangedListener {
-            // Clear any previously set errors
-            clearErrors(binding.passwordFieldLayout)
-
-            // Check if all fields are set, and "next" button can be enabled
-            validateInputFields()
-        }
+    private fun initializeListeners() {
         binding.loginEmailPasswordNext.setOnClickListener {
             showLoading()
             startLogin()
         }
-    }
-
-    private fun validateInputFields() {
-        val emailValue = binding.loginEmailField.text
-        val passwordValue = binding.loginPasswordField.text
-        if (!emailValue.isNullOrBlank() && !passwordValue.isNullOrBlank()) {
-            enableNextButton()
-        } else {
-            disableNextButton()
-        }
-    }
-
-    private fun clearErrors(component: TextInputLayout) {
-        component.error = null
-    }
-
-    private fun enableNextButton() {
-        binding.loginEmailPasswordNext.isEnabled = true
-    }
-
-    private fun disableNextButton() {
-        binding.loginEmailPasswordNext.isEnabled = false
     }
 
     private fun showLoading() {
@@ -128,25 +72,40 @@ class LoginEmailPasswordFragment : Fragment() {
                         hideLoading()
                         navigateNext()
                     }
-                    is SignInResult.CodeRequired -> {
-                        hideLoading()
-                        showGeneralError("Unexpected result: $actionResult")
-                    }
                     is SignInError -> {
                         hideLoading()
-                        showGeneralError(actionResult.errorMessage)
+                        when {
+                            actionResult.isUserNotFound() -> {
+                                showError("No account was found for this email address.")
+                            }
+                            actionResult.isInvalidCredentials()-> {
+                                showError("Username and password do not match.")
+                            }
+                            else -> {
+                                showGeneralError()
+                            }
+                        }
+                    }
+                    else -> {
+                        hideLoading()
+                        showGeneralError()
                     }
                 }
             } catch (exception: MsalException) {
                 hideLoading()
-                showGeneralError(exception.message.toString())
+                showError(exception.message.toString())
             }
         }
     }
 
-    private fun showGeneralError(errorMsg: String?) {
+    private fun showError(errorMsg: String) {
         val title = getString(R.string.error_title)
-        val message = getString(R.string.general_error_message, errorMsg)
+        showDialog(title, errorMsg)
+    }
+
+    private fun showGeneralError() {
+        val title = getString(R.string.error_title)
+        val message = getString(R.string.general_error_message)
         showDialog(title, message)
     }
 

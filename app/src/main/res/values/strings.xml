@@ -15,21 +15,21 @@
 	<string name="landing_login">Log in</string>
 	<string name="landing_signup">Sign up</string>
 `
-	<string name="signup_intro">No account yet? No problem. Let\'s create a new account for you.</string>
+	<string name="signup_intro">No account yet? No problem. Let\'s create one now</string>
 	<string name="email_hint">Email</string>
 	<string name="password_hint">Password</string>
 	<string name="signup_name_hint">Name</string>
-	<string name="signup_with_code">Sign up with one time code instead</string>
-	<string name="login_with_code">Log in with one time code instead</string>
 
-	<string name="enter_code">Please enter the code sent to your email</string>
-	<string name="not_received">Didn\'t receive a code? Tap here to resend it</string>
+	<string name="forgot_password">Forgot your password?</string>
+
+	<string name="enter_code">Enter the code sent to your email:</string>
+	<string name="not_received">Tap here to resend the code</string>
 	<string name="code_hint">Code</string>
 
 	<string name="next_button">Next</string>
 	<string name="error_title">Oops…</string>
 	<string name="dismiss">Dismiss</string>
-	<string name="general_error_message">An unexpected error has occurred.\nError details: %1$s</string>
+	<string name="general_error_message">Something went wrong. Our developers are on it.</string>
 
 	<string name="invalid_email_error">Invalid email</string>
 	<string name="invalid_password_error">Invalid password</string>
@@ -41,7 +41,7 @@
 	<string name="resend_code">Resend code</string>
 	<string name="code_sent">New code sent</string>
 
-	<string name="home_text">Welcome to Woodgrove Music. Select your favourite tunes and start listening 🎵</string>
+	<string name="home_text">Welcome to Woodgrove Music. Select your favourite tunes and start listening</string>
 	<string name="home_my_profile">My profile</string>
 
 	<string name="profile_text">Profile</string>
