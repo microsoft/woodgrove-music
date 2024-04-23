@@ -18,7 +18,7 @@
 		android:layout_height="wrap_content">
 
 		<ImageView
-			android:id="@+id/landing_logo"
+			android:id="@+id/signup_logo"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:elevation="10dp"
@@ -30,13 +30,13 @@
 
 		<TextView
 			android:id="@+id/introText"
+			style="@style/TextAppearance.MaterialComponents.Subtitle1"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="20dp"
+			android:layout_marginStart="14dp"
 			android:layout_marginEnd="20dp"
 			android:layout_marginTop="10dp"
-			android:layout_marginBottom="40dp"
-			android:textSize="13sp"
+			android:layout_marginBottom="15dp"
 			android:text="@string/enter_code"
 			android:textColor="@color/theme_colour_1_darker"
 			app:layout_constraintEnd_toEndOf="parent"
@@ -51,15 +51,17 @@
 			app:layout_constraintBottom_toTopOf="@+id/resendCode"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@+id/landing_logo"/>
+			app:layout_constraintTop_toBottomOf="@+id/signup_logo"/>
 
 		<TextView
 			android:id="@+id/resendCode"
+			style="@style/TextAppearance.MaterialComponents.Overline"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:textAlignment="center"
 			android:layout_marginStart="42dp"
 			android:layout_marginEnd="40dp"
-			android:layout_marginTop="10dp"
+			android:layout_marginTop="12dp"
 			android:textSize="11sp"
 			android:text="@string/not_received"
 			android:textColor="@color/theme_colour_1_darker"

@@ -87,7 +87,7 @@ class SignupEmailPasswordFragment : Fragment() {
                             showInvalidEmailError()
                         }
                         else -> {
-                            showGeneralError(actionResult.errorMessage)
+                            showGeneralError()
                         }
                     }
                 }
@@ -121,9 +121,9 @@ class SignupEmailPasswordFragment : Fragment() {
         alertDialog.show()
     }
 
-    private fun showGeneralError(errorMsg: String?) {
+    private fun showGeneralError() {
         val title = getString(R.string.error_title)
-        val message = getString(R.string.general_error_message, errorMsg)
+        val message = getString(R.string.general_error_message)
         showDialog(title, message)
     }
 
