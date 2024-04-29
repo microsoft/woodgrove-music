@@ -17,6 +17,7 @@ import com.woodgrove.android.R
 import com.woodgrove.android.databinding.FragmentLoginEmailPasswordBinding
 import com.woodgrove.android.ui.home.HomeActivity
 import com.woodgrove.android.utils.AuthClient
+import com.woodgrove.android.utils.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,6 +42,14 @@ class LoginEmailPasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initializeLandingListeners()
+        checkToPrefillUsername()
+    }
+
+    private fun checkToPrefillUsername() {
+        val username = activity?.intent?.getStringExtra(Constants.Intent.USERNAME)
+        if (!username.isNullOrBlank()) {
+            binding.loginEmailField.setText(username)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

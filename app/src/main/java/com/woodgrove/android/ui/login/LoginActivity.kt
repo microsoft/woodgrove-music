@@ -6,14 +6,16 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.woodgrove.android.R
 import com.woodgrove.android.databinding.ActivityLoginBinding
+import com.woodgrove.android.utils.Constants
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
     companion object {
-        fun getStartIntent(context: Context): Intent {
+        fun getStartIntent(context: Context, username: String? = null): Intent {
             return Intent(context, LoginActivity::class.java)
+                .putExtra(Constants.Intent.USERNAME, username)
         }
     }
 
