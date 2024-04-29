@@ -64,7 +64,7 @@ class LandingActivity : AppCompatActivity() {
     }
 
     private fun openLoginOverlay() {
-        startActivity(LoginActivity.getStartIntent(this))
+        startActivity(LoginActivity.getStartIntent(context = this))
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }
 

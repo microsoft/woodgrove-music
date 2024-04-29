@@ -86,7 +86,9 @@ class SignupEmailPasswordFragment : Fragment() {
                         actionResult.isInvalidUsername() -> {
                             showInvalidEmailError()
                         }
-                        else -> {
+                        else if (actionResult.isUserAlreadyExists()) {
+                            showUserAlreadyExistsError(email)
+                        } else -> {
                             showGeneralError()
                         }
                     }
@@ -103,7 +105,11 @@ class SignupEmailPasswordFragment : Fragment() {
         binding.passwordFieldLayout.error = getString(R.string.invalid_password_error)
     }
 
-    private fun showUserAlreadyExistsError() {
+    private fun showInvalidNameError() {
+        binding.nameFieldLayout.error = getString(R.string.invalid_name_error)
+    }
+
+    private fun showUserAlreadyExistsError(username: String) {
         val title = getString(R.string.error_title)
         val message = getString(R.string.user_exists_error_message)
         val builder = AlertDialog.Builder(requireContext())
@@ -111,7 +117,7 @@ class SignupEmailPasswordFragment : Fragment() {
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton(R.string.go_to_login) { dialog, id ->
-                navigateToLogin()
+                navigateToLogin(username)
             }
             .setNegativeButton(R.string.dismiss) { dialog, id ->
                 dialog.dismiss()
@@ -140,10 +146,10 @@ class SignupEmailPasswordFragment : Fragment() {
         alertDialog.show()
     }
 
-    private fun navigateToLogin() {
+    private fun navigateToLogin(username: String) {
         requireActivity().let { parentActivity ->
             // Start new activity
-            startActivity(LoginActivity.getStartIntent(requireActivity()))
+            startActivity(LoginActivity.getStartIntent(context = requireActivity(), username = username))
 
             val signUpActivity = try {
                 parentActivity as SignupActivity
