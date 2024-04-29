@@ -1,4 +1,4 @@
-package com.woodgrove.android.ui
+package com.woodgrove.android.ui.landing
 
 
 import android.content.Context
