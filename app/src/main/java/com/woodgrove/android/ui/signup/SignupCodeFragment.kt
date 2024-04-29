@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.microsoft.identity.client.exception.MsalException
 import com.microsoft.identity.nativeauth.statemachine.errors.SignInError
 import com.microsoft.identity.nativeauth.statemachine.errors.SignUpError
+import com.microsoft.identity.nativeauth.statemachine.errors.SubmitCodeError
 import com.microsoft.identity.nativeauth.statemachine.results.SignInResult
 import com.microsoft.identity.nativeauth.statemachine.results.SignUpResendCodeResult
 import com.microsoft.identity.nativeauth.statemachine.results.SignUpResult
@@ -41,7 +42,6 @@ class SignupCodeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         authState = (this.arguments?.getParcelable(Constants.STATE) as? SignUpCodeRequiredState)!!
 
-
         binding = FragmentSignupCodeBinding.inflate(inflater, container,false)
         return binding.root
     }
@@ -53,69 +53,34 @@ class SignupCodeFragment : Fragment() {
     }
 
     private fun initializeLandingListeners() {
-        binding.signupCodeCodeFieldLayout.setCodeInputLengthChanged { codeLength ->
-            // Check if all fields are set, and "next" button can be enabled
-            validateInputFields(codeLength)
-        }
         binding.signupCodeNext.setOnClickListener {
             showLoading()
             validateCode()
         }
-    }
-
-    private fun validateInputFields(codeLength: Int) {
-        if (codeLength == 8) {
-            enableNextButton()
-        } else {
-            disableNextButton()
+        binding.resendCode.setOnClickListener {
+            resendCode()
         }
-    }
-
-    private fun enableNextButton() {
-        binding.signupCodeNext.isEnabled = true
-    }
-
-    private fun disableNextButton() {
-        binding.signupCodeNext.isEnabled = false
-    }
-
-    private fun showLoading() {
-        binding.signupCodeNext.text = null
-        binding.signupCodeNextLoader.visibility = View.VISIBLE
-    }
-
-    private fun hideLoading() {
-        binding.signupCodeNext.text = getString(R.string.verify)
-        binding.signupCodeNextLoader.visibility = View.GONE
-    }
-
-    private fun clearCode() {
-        binding.signupCodeCodeFieldLayout.clearCode()
     }
 
     private fun validateCode() {
         CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val code = binding.signupCodeCodeFieldLayout.getCodeInputValue()
-                val actionResult = authState.submitCode(code)
+            val code = getCodeFieldValue()
+            val actionResult = authState.submitCode(code)
 
-                when (actionResult) {
-                    is SignUpResult.Complete -> {
-                        signIn(actionResult.nextState)
-                    }
-                    is SignUpResult.PasswordRequired -> {
-                        showInvalidCodeError()
-                        clearCode()
-                    }
-                    is SignUpResult.AttributesRequired -> {
-                        showGeneralError("Unexpected result: $actionResult")
-                    }
-                    is  SignUpError -> {
-                        showGeneralError(actionResult.errorMessage)
+            when (actionResult) {
+                is SignUpResult.Complete -> {
+                    signIn(actionResult.nextState)
+                }
+                is SubmitCodeError -> {
+                    when {
+                        actionResult.isInvalidCode() -> {
+                            showInvalidCodeError()
+                        }
+                        else -> {
+                            showGeneralError()
+                        }
                     }
                 }
-            } catch (exception: MsalException) {
-                showGeneralError(exception.message.toString())
             }
             hideLoading()
         }
@@ -129,8 +94,11 @@ class SignupCodeFragment : Fragment() {
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton(R.string.resend_code) { dialog, id ->
-                dialog.dismiss()
+                // Resend a new code to the user's email
                 resendCode()
+
+                // Update the UI
+                dialog.dismiss()
                 clearCode()
                 showLoading()
             }
@@ -142,9 +110,9 @@ class SignupCodeFragment : Fragment() {
         alertDialog.show()
     }
 
-    private fun showGeneralError(errorMsg: String?) {
+    private fun showGeneralError() {
         val title = getString(R.string.error_title)
-        val message = getString(R.string.general_error_message, errorMsg)
+        val message = getString(R.string.general_error_message)
         showDialog(title, message)
     }
 
@@ -180,11 +148,11 @@ class SignupCodeFragment : Fragment() {
                         showToast(getString(R.string.code_sent))
                     }
                     is SignUpError -> {
-                        showGeneralError(actionResult.errorMessage)
+                        showGeneralError()
                     }
                 }
             } catch (exception: MsalException) {
-                showGeneralError(exception.message.toString())
+                showGeneralError()
             }
             hideLoading()
         }
@@ -203,11 +171,11 @@ class SignupCodeFragment : Fragment() {
                 is SignInResult.CodeRequired,
                 is SignInResult.PasswordRequired -> {
                     hideLoading()
-                    showGeneralError("Unexpected result: $actionResult")
+                    showGeneralError()
                 }
                 is SignInError -> {
                     hideLoading()
-                    showGeneralError(actionResult.errorMessage)
+                    showGeneralError()
                 }
             }
         }
@@ -217,4 +185,20 @@ class SignupCodeFragment : Fragment() {
         startActivity(HomeActivity.getStartIntent(requireContext()))
         activity?.finish()
     }
+
+    private fun showLoading() {
+        binding.signupCodeNext.text = null
+        binding.signupCodeNextLoader.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        binding.signupCodeNext.text = getString(R.string.verify)
+        binding.signupCodeNextLoader.visibility = View.GONE
+    }
+
+    private fun clearCode() {
+        binding.signupCodeCodeFieldLayout.clearCode()
+    }
+
+    private fun getCodeFieldValue() = binding.signupCodeCodeFieldLayout.getCodeInputValue()
 }
