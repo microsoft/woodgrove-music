@@ -77,21 +77,21 @@ class SignupEmailPasswordFragment : Fragment() {
                 is SignUpError -> {
                     hideLoading()
                     when {
-                        actionResult.isUserAlreadyExists() -> {
-                            showUserAlreadyExistsError()
-                        }
                         actionResult.isInvalidPassword() ->  {
                             showInvalidPasswordError()
                         }
                         actionResult.isInvalidUsername() -> {
                             showInvalidEmailError()
                         }
-                        else if (actionResult.isUserAlreadyExists()) {
+                        actionResult.isUserAlreadyExists() -> {
                             showUserAlreadyExistsError(email)
                         } else -> {
                             showGeneralError()
                         }
                     }
+                }
+                else -> {
+                    showGeneralError()
                 }
             }
         }
@@ -103,10 +103,6 @@ class SignupEmailPasswordFragment : Fragment() {
 
     private fun showInvalidPasswordError() {
         binding.passwordFieldLayout.error = getString(R.string.invalid_password_error)
-    }
-
-    private fun showInvalidNameError() {
-        binding.nameFieldLayout.error = getString(R.string.invalid_name_error)
     }
 
     private fun showUserAlreadyExistsError(username: String) {

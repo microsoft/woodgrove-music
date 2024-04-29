@@ -36,7 +36,7 @@ class LoginEmailPasswordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeLandingListeners()
+        initializeListeners()
         checkToPrefillUsername()
     }
 
