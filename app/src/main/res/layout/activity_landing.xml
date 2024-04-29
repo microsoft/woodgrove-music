@@ -19,7 +19,7 @@
 		android:elevation="-10dp"
 		app:lottie_rawRes="@raw/lottie_background"
 		app:lottie_loop="true"
-		app:lottie_autoPlay="false"
+		app:lottie_autoPlay="true"
 		/>
 
 	<FrameLayout
