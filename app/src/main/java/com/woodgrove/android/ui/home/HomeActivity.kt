@@ -3,10 +3,22 @@ package com.woodgrove.android.ui.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.microsoft.identity.nativeauth.statemachine.results.GetAccountResult
+import com.microsoft.identity.nativeauth.statemachine.results.SignOutResult
 import com.woodgrove.android.R
 import com.woodgrove.android.databinding.ActivityHomeBinding
+import com.woodgrove.android.ui.landing.LandingActivity
+import com.woodgrove.android.utils.AuthClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.Duration
+
 
 class HomeActivity : AppCompatActivity() {
 
@@ -28,9 +40,9 @@ class HomeActivity : AppCompatActivity() {
         initialiseTabs()
     }
 
-    override fun onStart() {
-        super.onStart()
-        initializeButtonListeners()
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.options_menu, menu)
+        return true
     }
 
     private fun initialiseTabs() {
@@ -42,7 +54,7 @@ class HomeActivity : AppCompatActivity() {
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.discover -> setFragment(discoverFragment, it.title.toString())
+                com.woodgrove.android.R.id.discover -> setFragment(discoverFragment, it.title.toString())
                 R.id.feed -> setFragment(feedFragment, it.title.toString())
                 R.id.my_music -> setFragment(myMusicFragment, it.title.toString())
             }
@@ -50,8 +62,18 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun initializeButtonListeners() {
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.logout -> {
+                performLogout()
+                true
+            }
+            R.id.profile -> {
+                // Do nothing for now
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun setFragment(fragment: Fragment, title: String) {
@@ -60,5 +82,25 @@ class HomeActivity : AppCompatActivity() {
             replace(R.id.content_fragment, fragment)
             commit()
         }
+    }
+
+    private fun performLogout() {
+        val authClient = AuthClient.getAuthClient()
+        CoroutineScope(Dispatchers.Main).launch {
+            val accountState = authClient.getCurrentAccount()
+            if (accountState is GetAccountResult.AccountFound) {
+                val signOutResult = accountState.resultValue.signOut()
+                if (signOutResult is SignOutResult.Complete) {
+                    navigateToLanding()
+                } else {
+                    Toast.makeText(this@HomeActivity, "Something went wrong", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun navigateToLanding() {
+        startActivity(LandingActivity.getStartIntent(this))
+        finish()
     }
 }
